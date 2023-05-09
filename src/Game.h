@@ -13,7 +13,9 @@ Pos Path[maxn*maxn];
 
 void Menu_Main();
 void Get_Fastest(int sx,int sy);
+
 void Page_Exit(double x,double y); 
+void Page_Load();
 
 void GeneratingMaze();
 #endif
