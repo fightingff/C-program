@@ -430,7 +430,7 @@ static char shortcutkey(char *s)
 int menuList(int id, double x, double y, double w, double wlist, double h, char *labels[], int n)
 {
 	static int unfoldMenu = 0;
-	int result = 0;
+	int result = -1;
 	int k = -1;
 
 	// ´¦Àí¿ì½Ý¼ü
@@ -456,8 +456,10 @@ int menuList(int id, double x, double y, double w, double wlist, double h, char 
 	if( inBox(gs_UIState.mousex, gs_UIState.mousey, x, x + w, y, y + h) )
 		gs_UIState.actingMenu = id;
 
-	if( menuItem(id, x, y, w, h, labels[0]) )
+	if( menuItem(id, x, y, w, h, labels[0]) ){
 		unfoldMenu = ! unfoldMenu;
+		if(!unfoldMenu) return 0;
+	}
 
 	if( gs_UIState.actingMenu == id && unfoldMenu  ) {
 		int k;
