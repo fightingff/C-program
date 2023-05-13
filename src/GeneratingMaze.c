@@ -18,8 +18,98 @@ static int Rank=0;
 typedef enum{
     Route,Wall,Trap     
 }signs;
+typedef struct Node {
+    int IsWhat;
+    struct Node* next;
+}QNode;
+typedef struct {
+    QNode* head;
+    QNode* tail;
+}Queue;
 
-void MazeDfs(int x, int y) // 从（x,y) 开始生成地图
+int IsEmptyQ(Queue* q)
+{
+    return (q->head == NULL);
+}
+Queue* CreateQueue()
+{
+    Queue* q = ( Queue* ) malloc(sizeof(Queue));
+    if(!q) {
+        printf("No Room!\n");
+        return NULL;
+    }
+    q->head = NULL;
+    q->tail = NULL;
+}
+
+void AddNode(Queue* q, int IsWhat)
+{
+    QNode* qNode = (QNode*) malloc(sizeof(QNode));
+    if(qNode == NULL) {
+        printf("No Room!\n");
+        return NULL;
+    }
+    qNode->IsWhat = IsWhat;
+    qNode->next = NULL;
+    if( q->head == NULL ) q->head = qNode;
+    if( q->tail == NULL ) q->tail = qNode;
+    else {
+        q->tail->next = qNode;
+        q->tail = qNode;
+    }
+}
+
+void DeleteNode(Queue* q, int r)
+{
+    if(IsEmptyQ(q)) {
+        printf("Empty Queue!\n");
+        return 0;
+    }
+    QNode* temp = q->head;
+    while( r>1 )
+    {
+        temp = temp->next;
+    }
+    if(q->head == q->tail) {
+        q->head = NULL;
+        q->tail = NULL;
+    }
+    else {
+        temp->next = temp->next->next;
+    }
+}
+
+int GetNode(Queue *q, int r)
+{
+    if(IsEmptyQ(q)) {
+        printf("Empty Queue!\n");
+        return 0;
+    }
+    QNode* qNode = q->head;
+    while( r>0 )
+    {
+        qNode = qNode->next;
+    }
+    return qNode->IsWhat;
+}
+
+int QueueSize(Queue* q)
+{
+    if(IsEmptyQ(q)) {
+        printf("Empty Queue!\n");
+        return 0;
+    }
+    int size=0;
+    QNode* qNode = q->head;
+    while (qNode != NULL){
+        size++;
+        qNode = qNode->next;
+    }
+    return size;
+    
+}
+
+static void MazeDfs(int x, int y) // 从（x,y) 开始生成地图
 {
     mp[x][y] = Route;
     int dir[4][2]={{0,1},{0,-1},{1,0},{-1,0}};
@@ -61,7 +151,7 @@ void MazeDfs(int x, int y) // 从（x,y) 开始生成地图
     
 }
 
-void GeneratingMaze() 
+static void GeneratingMaze_Medium() 
 {
    srand(GetTickCount());
    for(int i=1; i<=N; ++i )
@@ -100,4 +190,63 @@ void GeneratingMaze()
 
 }
 
+void GeneratingMaze_Hard()
+{
+    srand(GetTickCount());
+   for(int i=1; i<=N; ++i )
+        for(int j=1; j<=N; ++j)
+            mp[i][j] = 1;
+    for (int i=1; i<N; ++i)
+    {
+        mp[i][1] = Route;
+        mp[1][i] = Route;
+        mp[N][i] = Route;
+        mp[i][N] = Route;
+    }
+
+    Queue* X = CreateQueue();
+    Queue* Y = CreateQueue();
+    
+    AddNode(X,3);
+    AddNode(Y,4);
+
+    while(!IsEmptyQ(X)) {
+        int r = rand() % QueueSize(X);
+        int x = GetNode(X, r);
+        int y = GetNode(Y, r);
+
+        int count = 0;
+		for (int i = x - 1; i < x + 2; i++) {	
+			for (int j = y - 1; j < y + 2; j++) {
+				if (abs(x - i) + abs(y - j) == 1 && mp[i][j] > 0) {
+					++count;
+				}
+			}
+        }
+
+        if(count <= 1) {
+            mp[x][y] = Route;
+            for (int i = x - 1; i < x + 2; i++) {
+				for (int j = y - 1; j < y + 2; j++) {
+					if (abs(x - i) + abs(y - j) == 1 && mp[i][j] == 0) {
+						AddNode(X, i);
+                        AddNode(Y, j);
+					}
+                }
+            }
+        }
+
+        DeleteNode(X, r);
+        DeleteNode(Y, r);
+    }
+
+    mp[3][3] = Route;
+    for( int i = N-2; i>=1; i--) {
+        if(mp[i][N - 2] == Route) {
+            mp[i][N - 1] = Route;
+            break;
+        }
+    }
+    
+}
 #endif
