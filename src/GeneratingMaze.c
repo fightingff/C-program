@@ -4,6 +4,7 @@
 #ifndef GENERATINGMAZE_C
 #define GENERATINGMAZE_C
 
+#include<stdio.h>
 #include<stdlib.h>
 #include<time.h>
 #include<math.h>
@@ -14,7 +15,7 @@ extern int N;
 extern int mp[maxn][maxn];
 //控制复杂度，rank数值越大复杂度越低，>=0
 static int Rank=0;
-//存储地图 0表示墙 1表示路 3表示陷阱 -1表示起点，-2表示终点
+//存储地图 0表示路 1表示墙 3表示陷阱 -1表示起点，-2表示终点
 typedef enum{
     Route,Wall,Trap     
 }signs;
@@ -35,7 +36,7 @@ Queue* CreateQueue()
 {
     Queue* q = ( Queue* ) malloc(sizeof(Queue));
     if(!q) {
-        printf("No Room!\n");
+        //printf("No Room!\n");
         return NULL;
     }
     q->head = NULL;
@@ -47,7 +48,7 @@ void AddNode(Queue* q, int IsWhat)
     QNode* qNode = (QNode*) malloc(sizeof(QNode));
     if(qNode == NULL) {
         printf("No Room!\n");
-        return NULL;
+        return;
     }
     qNode->IsWhat = IsWhat;
     qNode->next = NULL;
@@ -59,18 +60,18 @@ void AddNode(Queue* q, int IsWhat)
     }
 }
 
-void DeleteNode(Queue* q, int r)
+void My_DeleteNode(Queue* q, int r)
 {
     if(IsEmptyQ(q)) {
         printf("Empty Queue!\n");
-        return NULL;
+        return ;
     }
     QNode *p,*pre;
     pre=q->head;
     p=pre->next;
     if( r == 0 ){
         q->head = q->head->next;
-     //  free(pre);
+       free(pre);
     }
     else 
     {
@@ -81,7 +82,7 @@ void DeleteNode(Queue* q, int r)
             r--;
         }
         pre->next = p->next;
-        //free(p);
+        free(p);
     }
 }
 
@@ -103,7 +104,7 @@ int GetNode(Queue *q, int r)
 int QueueSize(Queue* q)
 {
     if(IsEmptyQ(q)) {
-        printf("Empty Queue!\n");
+       printf("Empty Queue!\n");
         return 0;
     }
     int size=0;
@@ -243,8 +244,8 @@ void GeneratingMaze_Medium() // 规模小于 15*15！
             }
         }
 
-        DeleteNode(X, r);
-        DeleteNode(Y, r);
+        My_DeleteNode(X, r);
+        My_DeleteNode(Y, r);
     }
     mp[3][3] = -1;
     for( int i = N-2; i>=1; i--) {
