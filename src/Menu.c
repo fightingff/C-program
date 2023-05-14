@@ -85,6 +85,7 @@ void Menu_Choose_Show(){//显示选择关卡
 		Page_Load();
 		Time=0,SideBar();
 		TabBar();
+		GeneratingMaze(Tough_Choose);
 	}
 }
 
@@ -94,12 +95,12 @@ void Clock(){//计时器
 	double H=GetWindowHeight();
 	SetPointSize(50);
 	SetPenColor("White");
-	drawLabel(1,H-2,Time_s);
+	drawLabel(0.95,H-2,Time_s);
 	SetPenColor("Red");
 	++Time;
 	sprintf(Time_s,"%02d:%02d:%02d",Time/3600,Time/60%60,Time%60);
 	// printf("%s\n",Time_s);
-	drawLabel(1,H-2,Time_s);
+	drawLabel(0.95,H-2,Time_s);
 }
 void SideBar(){
 	DisplayClear();
@@ -141,11 +142,11 @@ void TabBar_Show(){
 		// case 2:cancelTimerEvent();break;
 		case 3:Page_Exit();break;
 	}
-	int opt2=menuList(GenUIID(102),W-H+1,H-0.5,1,1,0.5,MenuListHelp,3);
+	int opt2=menuList(GenUIID(102),W-H+1,H-0.5,1,1.2,0.5,MenuListHelp,3);
 	switch(opt2){
 		case 2:Page_About();break;
 	}
 	printf("%d %d\n",opt1,opt2);
-	if(!opt1||!opt2) DisplayClear(),SideBar();
+	if(!opt1||!opt2) DisplayClear(),SideBar(),DrawMaze();
 }
 #endif

@@ -158,7 +158,6 @@ void MazeDfs(int x, int y) // 从（x,y) 开始生成地图
     }
     
 }
-
 void GeneratingMaze_Hard() 
 {
    srand(GetTickCount());
@@ -255,4 +254,13 @@ void GeneratingMaze_Medium() // 规模小于 15*15！
         }
     }
 }
+
+void GeneratingMaze(int rank){
+    switch(rank){
+        case 1:N=10,GeneratingMaze_Medium();break;  
+        case 2:N=20,GeneratingMaze_Hard();break; 
+    }
+    DrawMaze();
+}
+
 #endif

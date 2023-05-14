@@ -11,29 +11,29 @@ extern int N;
 extern int mp[maxn][maxn];
 
 
-void drawLines(double st, double len)
+void drawLines(double X, double Y,double len)
 {
 	SetPenSize(1.5);
     double ul = len/N;
     for (int i=1; i<=N-1; ++i)
     {
-        MovePen(st, st+(i-1)*ul);
+        MovePen(X, Y-(i-1)*ul);
         DrawLine(len-2*ul, 0);
     }
     for (int j=1; j<=N-1; ++j)
     {
-        MovePen(st+(j-1)*ul, st);
+        MovePen(X+(j-1)*ul, Y);
         DrawLine(0, len-2*ul);
     }
 }
-void PaintUnits(double st, double len)
+void PaintUnits(double X, double Y,double len)
 {
     double ul = len/N;
     for (int i=2; i<=N-1;++i) // omit the wrapper
     {
         for(int j=2; j<=N-1;++j)
         {
-            MovePen(st+(i-2)*ul, st+(j-2)*ul);
+            MovePen(X+(i-2)*ul, Y-(j-2)*ul);
             if( mp[i][j] == 1 || mp[i][j] == 3 ){
                 StartFilledRegion(1);
                     DrawLine(ul, 0);
@@ -42,34 +42,6 @@ void PaintUnits(double st, double len)
                     DrawLine(0, -ul);
                 EndFilledRegion();
             }
-            /*if( mp[i][j] == -1){
-            	SetPenColor("Green");
-				StartFilledRegion(1);
-                    DrawLine(ul, 0);
-                    DrawLine(0, ul);
-                    DrawLine(-ul, 0);
-                    DrawLine(0, -ul);
-                EndFilledRegion();           	
-			}
-			if( mp[i][j] == -2){
-            	SetPenColor("Bule");
-				StartFilledRegion(1);
-                    DrawLine(ul, 0);
-                    DrawLine(0, ul);
-                    DrawLine(-ul, 0);
-                    DrawLine(0, -ul);
-                EndFilledRegion();           	
-			}
-			if( mp[i][j] == 3){
-				SetPenColor("Red");
-				StartFilledRegion(1);
-                    DrawLine(ul, 0);
-                    DrawLine(0, ul);
-                    DrawLine(-ul, 0);
-                    DrawLine(0, -ul);
-                EndFilledRegion(); 
-			}
-			SetPenColor("Gray);*/
         }
     }
 }
@@ -77,17 +49,12 @@ void PaintUnits(double st, double len)
 void DrawMaze()
 {
     //(st, st)为迷宫左上角，len为迷宫边长，两者可以改为外部传入
-    double cx,cy,st,len;
-    cx = GetWindowWidth();
-    cy = GetWindowHeight();
-    st = MIN(cx,cy)/6;
-    len = 2*MIN(cx,cy)/3;                   
-
+    double W=GetWindowWidth(),H=GetWindowHeight(),len = H*0.9; 
     SetPenColor("Gray");
     SetPenSize(2);
     
-	PaintUnits(st, len);
-    drawLines(st, len);
+	PaintUnits(W-H,H-2, len);
+    // drawLines(W-H,H-2, len);
     
 }
 

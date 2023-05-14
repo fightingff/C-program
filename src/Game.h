@@ -21,5 +21,7 @@ void Page_Exit();
 void Page_Load();
 void SideBar();
 
-void GeneratingMaze();
+void GeneratingMaze(int rank);
+
+void DrawMaze();
 #endif
