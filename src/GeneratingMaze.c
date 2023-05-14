@@ -63,19 +63,25 @@ void DeleteNode(Queue* q, int r)
 {
     if(IsEmptyQ(q)) {
         printf("Empty Queue!\n");
-        return 0;
+        return NULL;
     }
-    QNode* temp = q->head;
-    while( r>1 )
+    QNode *p,*pre;
+    pre=q->head;
+    p=pre->next;
+    if( r == 0 ){
+        q->head = q->head->next;
+     //  free(pre);
+    }
+    else 
     {
-        temp = temp->next;
-    }
-    if(q->head == q->tail) {
-        q->head = NULL;
-        q->tail = NULL;
-    }
-    else {
-        temp->next = temp->next->next;
+        while (r>1)
+        {
+            pre = pre->next;
+            p = pre->next;
+            r--;
+        }
+        pre->next = p->next;
+        //free(p);
     }
 }
 
@@ -89,6 +95,7 @@ int GetNode(Queue *q, int r)
     while( r>0 )
     {
         qNode = qNode->next;
+        r--;
     }
     return qNode->IsWhat;
 }
@@ -109,7 +116,7 @@ int QueueSize(Queue* q)
     
 }
 
-static void MazeDfs(int x, int y) // 从（x,y) 开始生成地图
+void MazeDfs(int x, int y) // 从（x,y) 开始生成地图
 {
     mp[x][y] = Route;
     int dir[4][2]={{0,1},{0,-1},{1,0},{-1,0}};
@@ -151,13 +158,13 @@ static void MazeDfs(int x, int y) // 从（x,y) 开始生成地图
     
 }
 
-static void GeneratingMaze_Medium() 
+void GeneratingMaze_Hard() 
 {
    srand(GetTickCount());
    for(int i=1; i<=N; ++i )
         for(int j=1; j<=N; ++j)
             mp[i][j] = 1;
-   for (int i=1; i<N; ++i)
+   for (int i=1; i<=N; ++i)
     {
         mp[i][1] = Route;
         mp[1][i] = Route;
@@ -190,13 +197,13 @@ static void GeneratingMaze_Medium()
 
 }
 
-void GeneratingMaze_Hard()
+void GeneratingMaze_Medium() // 规模小于 15*15！
 {
-    srand(GetTickCount());
+   srand(GetTickCount());
    for(int i=1; i<=N; ++i )
         for(int j=1; j<=N; ++j)
             mp[i][j] = 1;
-    for (int i=1; i<N; ++i)
+    for (int i=1; i<=N; ++i)
     {
         mp[i][1] = Route;
         mp[1][i] = Route;
@@ -218,7 +225,7 @@ void GeneratingMaze_Hard()
         int count = 0;
 		for (int i = x - 1; i < x + 2; i++) {	
 			for (int j = y - 1; j < y + 2; j++) {
-				if (abs(x - i) + abs(y - j) == 1 && mp[i][j] > 0) {
+				if (abs(x - i) + abs(y - j) == 1 && mp[i][j] == Route) {
 					++count;
 				}
 			}
@@ -228,7 +235,7 @@ void GeneratingMaze_Hard()
             mp[x][y] = Route;
             for (int i = x - 1; i < x + 2; i++) {
 				for (int j = y - 1; j < y + 2; j++) {
-					if (abs(x - i) + abs(y - j) == 1 && mp[i][j] == 0) {
+					if (abs(x - i) + abs(y - j) == 1 && mp[i][j] == Wall) {
 						AddNode(X, i);
                         AddNode(Y, j);
 					}
@@ -239,14 +246,12 @@ void GeneratingMaze_Hard()
         DeleteNode(X, r);
         DeleteNode(Y, r);
     }
-
-    mp[3][3] = Route;
+    mp[3][3] = -1;
     for( int i = N-2; i>=1; i--) {
         if(mp[i][N - 2] == Route) {
-            mp[i][N - 1] = Route;
+            mp[i][N - 1] = -2;
             break;
         }
     }
-    
 }
 #endif
