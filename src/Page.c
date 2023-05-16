@@ -36,7 +36,7 @@ void Page_Exit(){//退出界面
 		SetPenColor(Colors[i%Colors_N]);
 		MovePen(X+R+R*i/N*cos(2.0*Pi/N*i),Y+R*i/N*sin(2.0*Pi/N*i));
 		DrawArc(R*i/N,0,360);
-		Pause(0.02);
+		Pause(0.01);
 	}
 	Page_About();
 	//延迟后退出
@@ -55,9 +55,37 @@ void Page_Load(){
 		SetPenColor(Colors[i%Colors_N]);
 		MovePen(X+R+R*i/N*cos(2.0*Pi/N*i),Y+R*i/N*sin(2.0*Pi/N*i));
 		DrawArc(R*i/N,0,360);
-		Pause(0.02);
+		Pause(0.01);
 	}
 }
 
+void EraseMap(){
+	double W=GetWindowWidth(),H=GetWindowHeight();
+	double X=W-H-1.2,Y=H,Edge=H;
+	const int N=100;
+	for(int i=1;i<=N;i++){
+		SetPenColor("White");
+		drawRectangle(X,Y-Edge,Edge/N,Edge,1);
+		SetPenColor("Red");
+		drawRectangle(X+=Edge/N,Y-Edge,Edge/N,Edge,1);
+		Pause(0.01);
+	}
+}
+void Page_Victory(){
+	EraseMap();
+	double W=GetWindowWidth(),H=GetWindowHeight();
+	double X=W-H-1.2,Y=H,Edge=H;
+	SetPenSize(10);
+	SetPointSize(100);
+	SetPenColor("Green");
+	double label_w=TextStringWidth("Victory!")+0.2,label_h=GetFontHeight()+0.2;
+	drawBox(X+Edge/2-label_w/2,Y-Edge/2+label_h/2,label_w,label_h,1,"Victory!",'C',"Yellow");
+    if(UpdateRecord()){
+		label_w=TextStringWidth("New Record!")+0.2,label_h=GetFontHeight()+0.2;
+		drawBox(X+Edge/2-label_w/2,Y-Edge/2-label_h-0.5,label_w,label_h,1,"New Record!",'C',"red");
+	}
+	Pause(5.0);
+	Menu_Main();
+}
 #endif
 

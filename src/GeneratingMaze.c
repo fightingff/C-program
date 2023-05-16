@@ -13,8 +13,8 @@
 
 extern int N;
 extern int mp[maxn][maxn];
+extern int Rank;
 //控制复杂度，rank数值越大复杂度越低，>=0
-static int Rank=0;
 //存储地图 0表示路 1表示墙 3表示陷阱 -1表示起点，-2表示终点
 typedef enum{
     Route,Wall,Trap     

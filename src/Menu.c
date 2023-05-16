@@ -85,7 +85,7 @@ void Menu_Choose_Show(){//œ‘ æ—°‘Òπÿø®
 		Page_Load();
 		Time=0,SideBar();
 		TabBar();
-		GeneratingMaze(Tough_Choose);
+		GeneratingMaze(Rank=Tough_Choose);
 	}
 }
 
@@ -138,10 +138,13 @@ void TabBar_Show(){
 	SetPenSize(2);
 	int opt1=menuList(GenUIID(101),W-H-0.5,H-0.5,1,1.5,0.5,MenuListGame,4);
 	switch(opt1){
-		case 1:cancelTimerEvent();Menu_Choose();break;
-		// case 2:cancelTimerEvent();break;
+		case 1:cancelTimerEvent(),cancelMouseEvent();Menu_Choose();break;
+		case 2:cancelTimerEvent(),cancelMouseEvent();Page_Victory();break;
 		case 3:Page_Exit();break;
 	}
+	setMenuColors("White","Orange","Blue","Green",0);
+	SetPointSize(20);
+	SetPenSize(2);
 	int opt2=menuList(GenUIID(102),W-H+1,H-0.5,1,1.2,0.5,MenuListHelp,3);
 	switch(opt2){
 		case 2:Page_About();break;
