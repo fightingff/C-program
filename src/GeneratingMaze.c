@@ -194,6 +194,7 @@ void GeneratingMaze_Hard()
 
         }  
     }
+    mp[3][3] = -1;
 
 }
 

@@ -7,6 +7,10 @@ int mp[maxn][maxn];
 //存储地图 0表示空 1表示障碍，-1表示起点，-2表示终点
 int Time; //游戏时间
 int Rank; //游戏难度
+struct Imaze{
+    int stx,sty,len;
+}imaze;// drawed maze information
+
 typedef struct Point{
     int x,y,step;
     struct Point *next;
@@ -25,6 +29,8 @@ void Page_Exit();
 void Page_Load();
 void Page_Victory();
 void SideBar();
+
+void MouseEditMaze();
 
 void GeneratingMaze(int rank);
 

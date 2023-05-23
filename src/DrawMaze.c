@@ -10,7 +10,6 @@
 extern int N;
 extern int mp[maxn][maxn];
 
-
 void drawLines(double X, double Y,double len)
 {
 	SetPenSize(1.5);
@@ -34,14 +33,23 @@ void PaintUnits(double X, double Y,double len)
         for(int j=2; j<=N-1;++j)
         {
             MovePen(X+(i-2)*ul, Y-(j-2)*ul);
-            if( mp[i][j] == 1 || mp[i][j] == 3 ){
-                StartFilledRegion(1);
-                    DrawLine(ul, 0);
-                    DrawLine(0, ul);
-                    DrawLine(-ul, 0);
-                    DrawLine(0, -ul);
-                EndFilledRegion();
-            }
+            if(mp[i][j] != 0 )
+			{
+				switch(mp[i][j])
+				{
+					case 1:break;
+					case -1:SetPenColor("Yellow");break;
+					case -2:SetPenColor("Blue");break;
+					case 3: SetPenColor("Red");break;
+				}
+					StartFilledRegion(1);
+                    	DrawLine(ul, 0);
+                    	DrawLine(0, ul);
+                    	DrawLine(-ul, 0);
+                    	DrawLine(0, -ul);
+                	EndFilledRegion();
+            	SetPenColor("Gray");
+        	}
         }
     }
 }
@@ -53,10 +61,11 @@ void DrawMaze()
     SetPenColor("Gray");
     SetPenSize(2);
     
-	PaintUnits(W-H,H-2, len);
+	PaintUnits(W-H,H-1, len);
     // drawLines(W-H,H-2, len);
     
 }
+
 
 
 #endif
