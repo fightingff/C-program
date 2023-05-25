@@ -25,6 +25,11 @@ void LoadRecord(){
         fclose(fp);
     }
 }
+int GetPlay(){
+    Rp p=Head;
+    for(int i=1;i<=Records_N;i++,p=p->next) if(p->rank==Rank) return Time=p->cost,i;
+    return -1; 
+}
 void Modify(int id){
     char filename[20]="";
     sprintf(filename,"Record%d.txt",id);
@@ -37,6 +42,13 @@ void Modify(int id){
         free(q);
     }
     fclose(fp);
+
+    sprintf(filename,"Game%d.txt",id);
+    fp=fopen(filename,"w");
+    fprintf(fp,"%d\n",N);
+    for(int i=1;i<=N;i++,fprintf(fp,"\n")) 
+      for(int j=1;j<=N;j++) fprintf(fp,"%d ",mp[i][j]);
+    fclose(fp);
 }
 void LoadRecord_i(int id){
     char filename[20]="";
@@ -46,10 +58,18 @@ void LoadRecord_i(int id){
     Head_List=Tail_List=NULL;
     for(int i=1;i<=Total;i++){
         Tp p=(Tp)malloc(sizeof(Pos));
-        fprintf(fp,"%d %d",&p->x,&p->y);
+        fscanf(fp,"%d%d",&p->x,&p->y);
         if(Head_List==NULL) Head_List=p;else Tail_List->next=p;
         Tail_List=p;
     }
+    if(Tail_List!=NULL) Tail_List->next=NULL;
+    fclose(fp);
+
+    sprintf(filename,"Game%d.txt",id);
+    fp=fopen(filename,"r");
+    fscanf(fp,"%d",&N);
+    for(int i=1;i<=N;i++) 
+      for(int j=1;j<=N;j++) fscanf(fp,"%d",&mp[i][j]);
     fclose(fp);
 }
 

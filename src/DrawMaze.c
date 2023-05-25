@@ -56,8 +56,7 @@ void MouseEditMaze(){
 
 }
 
-void ShowPath(Tp p){
-	SaveGame();
+void ShowPath(Pos *p){
 	Tp tp=p;
 	for(;p!=NULL;p=p->next){
 		mp[p->x][p->y]=-3;

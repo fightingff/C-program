@@ -82,6 +82,7 @@ void EraseMap(){
 	}
 }
 void Page_Victory(){
+	Clock();
 	EraseMap();
 	cancelTimerEvent();
 	double W=GetWindowWidth(),H=GetWindowHeight();

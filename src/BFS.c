@@ -49,6 +49,7 @@ void Get_Fastest(){
         q->x=T.x,q->y=T.y,q->step=T.step;
         q->next=p,p=q,T=Pre[T.x][T.y];
     }
+    SaveGame();
     ShowPath(p);
 }
 

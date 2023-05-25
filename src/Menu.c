@@ -153,6 +153,28 @@ void GetHint(){
 	setButtonColors("White","Green","Yellow","Yellow",1);
 	if(button(GenUIID(999),0.95,5.0,3.0,0.9,"提   示")) Get_Fastest();
 }
+void BestPlay(){
+	SetPointSize(30);
+	setButtonColors("White","Red","Red","Yellow",1);
+	if(button(GenUIID(996),0.95,4.0,3.0,0.9,"最 佳 操 作")){
+		SaveGame();
+		LoadRecord();
+		int id=GetPlay();
+		if(!~id){
+			double W=GetWindowWidth(),H=GetWindowHeight();
+			SetPointSize(50),SetPenColor("Red");
+			drawBox(W-H+2,H/2,4,2,1,"No Record!",'C',"Yellow");
+			Pause(1.0);
+			DisplayClear();
+			ReDraw();
+			return;
+		}
+		LoadRecord_i(id),--Time,Clock(),ReDraw();
+		Pause(2.0);
+		Time=0;
+		ShowPath(Head_List);
+	}
+}
 void TabBar(){registerMouseEvent(MouseEvent_TabBar);}
 void MouseEvent_TabBar(int x,int y,int button,int event){
 	uiGetMouse(x,y,button,event);
@@ -160,6 +182,7 @@ void MouseEvent_TabBar(int x,int y,int button,int event){
 }
 void TabBar_Show(){
 	GetHint();
+	BestPlay();
 	static char *MenuListGame[]={
 		"Game",
 		"New Game",

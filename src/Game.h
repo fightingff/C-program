@@ -24,6 +24,8 @@ Pos *Head_List,*Tail_List;//记录玩家操作
 void Menu_Main();
 int Check(int x,int y);
 void Get_Fastest();
+
+void Clock();
 void TabBar();
 void SideBar();
 void ReDraw();
@@ -48,6 +50,8 @@ void LoadRecord();
 void LoadGame();
 void SaveGame();
 int UpdateRecord();
+int GetPlay();
+void LoadRecord_i(int id);
 
 void Go();
 
