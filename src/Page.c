@@ -9,6 +9,16 @@
 
 static int Colors_N=8;
 static char *Colors[]={"Red","Orange","Yellow","Green","Blue","Violet","Magenta","Cyan"};
+void MouseEvent_About(int x,int y,int btn,int event){//鼠标事件
+	uiGetMouse(x,y,btn,event);
+	double W=GetWindowWidth(),H=GetWindowHeight();
+	double X=W/2,Y=H/2;
+	SetPointSize(30);
+	if(button(GenUIID(555),W-2.1,2,1.5,0.8,"����")){
+		cancelMouseEvent();
+		ReDraw();
+	}
+}
 void Page_About(){//退出的文字
 	double W=GetWindowWidth(),H=GetWindowHeight();
 	double X=W/2,Y=H/2;
@@ -17,14 +27,14 @@ void Page_About(){//退出的文字
 	SetPenColor("Green");
 	drawRectangle(X-2,Y-0.5,3.0/0.618,3.0,0);
 	SetPenColor("Blue");
-	SetFont("行楷");
 	SetPointSize(30);
 	MovePen(X-1.2,Y+1.5);
 	DrawTextString("Thank you!");
 	MovePen(X-1.2,Y+0.5);
 	DrawTextString("Author: FMH & WZJ");
+	registerMouseEvent(MouseEvent_About);
 }
-void Page_Exit(){//退出界面
+void Page_Exit(){//退出界�?
 	DisplayClear();
 	cancelMouseEvent();
 	cancelTimerEvent();
@@ -39,7 +49,7 @@ void Page_Exit(){//退出界面
 		Pause(0.01);
 	}
 	Page_About();
-	//延迟后退出
+	//延迟后退�?
 	Pause(3.0);
 	ExitGraphics();
 }
@@ -51,7 +61,7 @@ void Page_Load(){
 	double X=W/2,Y=H/2;
 	SetPenSize(2);
 	const double Pi=acos(-1),R=2,N=60;
-	for(int i=N*2;i>=0;i--){//加载的动画
+	for(int i=N*2;i>=0;i--){//加载的动�?
 		SetPenColor(Colors[i%Colors_N]);
 		MovePen(X+R+R*i/N*cos(2.0*Pi/N*i),Y+R*i/N*sin(2.0*Pi/N*i));
 		DrawArc(R*i/N,0,360);
@@ -73,6 +83,7 @@ void EraseMap(){
 }
 void Page_Victory(){
 	EraseMap();
+	cancelTimerEvent();
 	double W=GetWindowWidth(),H=GetWindowHeight();
 	double X=W-H-1.2,Y=H,Edge=H;
 	SetPenSize(10);

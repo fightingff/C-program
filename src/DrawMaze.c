@@ -9,22 +9,8 @@
 #define MIN(x,y) ((x) < (y) ? (x) : (y))
 extern int N;
 extern int mp[maxn][maxn];
+extern int Xp,Yp;
 
-void drawLines(double X, double Y,double len)
-{
-	SetPenSize(1.5);
-    double ul = len/N;
-    for (int i=1; i<=N-1; ++i)
-    {
-        MovePen(X, Y-(i-1)*ul);
-        DrawLine(len-2*ul, 0);
-    }
-    for (int j=1; j<=N-1; ++j)
-    {
-        MovePen(X+(j-1)*ul, Y);
-        DrawLine(0, len-2*ul);
-    }
-}
 void PaintUnits(double X, double Y,double len)
 {
     double ul = len/N;
@@ -32,16 +18,18 @@ void PaintUnits(double X, double Y,double len)
     {
         for(int j=2; j<=N-1;++j)
         {
-            MovePen(X+(i-2)*ul, Y-(j-2)*ul);
-            if(mp[i][j] != 0 )
+            MovePen(X+(j-2)*ul, Y-(i-2)*ul);//转置过来
+            if(mp[i][j] != 0||((i==Xp&&j==Yp)) )
 			{
 				switch(mp[i][j])
 				{
 					case 1:break;
-					case -1:SetPenColor("Yellow");break;
+					case -1:SetPenColor("White");break;
 					case -2:SetPenColor("Blue");break;
+					case -3:SetPenColor("Yellow");break;
 					case 3: SetPenColor("Red");break;
 				}
+                if(i==Xp&&j==Yp) SetPenColor("Green");
 					StartFilledRegion(1);
                     	DrawLine(ul, 0);
                     	DrawLine(0, ul);
@@ -52,20 +40,32 @@ void PaintUnits(double X, double Y,double len)
         	}
         }
     }
+	if(mp[Xp][Yp]==-2) Page_Victory();
 }
 
 void DrawMaze()
 {
     //(st, st)为迷宫左上角，len为迷宫边长，两者可以改为外部传入
-    double W=GetWindowWidth(),H=GetWindowHeight(),len = H*0.9; 
+    double W=GetWindowWidth(),H=GetWindowHeight(),len = H*0.9;
     SetPenColor("Gray");
     SetPenSize(2);
-    
-	PaintUnits(W-H,H-1, len);
-    // drawLines(W-H,H-2, len);
-    
+	PaintUnits(W-H,H-2, len);
 }
 
+void MouseEditMaze(){
 
+}
 
+void ShowPath(Tp p){
+	SaveGame();
+	Tp tp=p;
+	for(;p!=NULL;p=p->next){
+		mp[p->x][p->y]=-3;
+		ReDraw();
+		Pause(0.1);
+	}
+	LoadGame();
+	Pause(3.0);
+    ReDraw();
+}
 #endif

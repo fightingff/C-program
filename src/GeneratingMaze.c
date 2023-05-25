@@ -257,9 +257,10 @@ void GeneratingMaze_Medium() // 规模小于 15*15！
 }
 
 void GeneratingMaze(int rank){
+    Xp=Yp=3;
     switch(rank){
-        case 1:N=10,GeneratingMaze_Medium();break;  
-        case 2:N=20,GeneratingMaze_Hard();break; 
+        case 1:N=12,GeneratingMaze_Medium();break;  
+        case 2:N=22,GeneratingMaze_Hard();break; 
     }
     DrawMaze();
 }

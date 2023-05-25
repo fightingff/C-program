@@ -5,11 +5,14 @@
 #include"extgraph.h" 
 #include"imgui.h"
 #include"graphics.h"
+#include<time.h>
 
 int tp_first;
+int lst;//尽力修正时钟
 void MouseEvent_Main(int x,int y,int button,int event);
 void MouseEvent_Choose(int x,int y,int button,int event);
 void MouseEvent_TabBar(int x,int y,int button,int event);
+void MouseEvent_Hint(int x,int y,int button,int event);
 void Menu_Main_Show();
 void Menu_Choose_Show();
 void TabBar_Show();
@@ -31,10 +34,29 @@ void Menu_Main_Show(){//显示主菜单
 	SetFont("楷体");
 	SetPointSize(30);
 	SetPenSize(3);
+	double dy=1.5;
+	Y+=1,X-=0.5;
 	setButtonColors("White","Green","White","Blue",1);
-	if(button(GenUIID(0),X,Y,2.0,1.0,"新游戏")) Menu_Choose();
+	if(button(GenUIID(0),X,Y,3.0,1.0,"新游戏")){
+		cancelMouseEvent();
+		Menu_Choose();
+		return;
+	}
+	setButtonColors("White","Green","White","Blue",1);
+	if(button(GenUIID(1),X,Y-=dy,3.0,1.0,"继续")){
+		cancelMouseEvent();
+		LoadGame(),Page_Load(),ReDraw();
+		Go();
+		return;
+	}
+	setButtonColors("White","Green","White","Blue",1);
+	if(button(GenUIID(1),X,Y-=dy,3.0,1.0,"绘制地图")) {
+		cancelMouseEvent();
+		MouseEditMaze(); 
+		return;
+	}
 	setButtonColors("White","Red","White","Blue",1);
-	if(button(GenUIID(1),X,Y-=2,2.0,1.0,"退出")) Page_Exit(); 
+	if(button(GenUIID(1),X+0.5,Y-=dy,2.0,1.0,"退出")) Page_Exit(); 
 }
 
 void MouseEvent_Choose(int x,int y,int button,int event){
@@ -50,22 +72,33 @@ void Draw_Label(int Tough_Choose){//绘制关卡切换动画
 	double X=W/2-4,Y=H/2+1;
 	sprintf(s,"选择关卡：【%d】%s",Tough_Choose,Tough[Tough_Choose]);
 	//完成一段切换的动画
-	if(tp_flag||tp_first){
+	if(tp_flag){
 		DisplayClear();
 		double tp_x=W/2-0.5,tp_y=Y+4;
 		SetPenColor("violet");
 		SetPointSize(50);
 		drawLabel(X,Y,"选择关卡：");
 		for(int i=0;i<=3;i++){//自上而下落下
-			SetPenColor("White");
+			DisplayClear();
+			SetPenColor("violet");
 			SetPointSize(50);
-			drawLabel(tp_x,tp_y,s+10);
+			drawLabel(X,Y,"选择关卡：");
 			SetPenColor("Red");
 			SetPointSize(50);
 			drawLabel(tp_x,tp_y-=1,s+10);
 			Pause(0.02);
 		}
-		tp_flag=tp_first=0;
+		tp_flag=0;
+	}else if(tp_first){
+		DisplayClear();
+		double tp_x=W/2-0.5,tp_y=Y;
+		SetPenColor("violet");
+		SetPointSize(50);
+		drawLabel(X,Y,"选择关卡：");
+		SetPenColor("Red");
+		SetPointSize(50);
+		drawLabel(tp_x,tp_y,s+10);
+		tp_first=0;
 	}
 }
 void Menu_Choose_Show(){//显示选择关卡
@@ -86,18 +119,19 @@ void Menu_Choose_Show(){//显示选择关卡
 		Time=0,SideBar();
 		TabBar();
 		GeneratingMaze(Rank=Tough_Choose);
+		Head_List=Tail_List=NULL,Total=0,Go();
 	}
 }
 
 extern int Time;
+static char Time_s[10]="";
 void Clock(){//计时器
-	static char Time_s[10]="";
 	double H=GetWindowHeight();
 	SetPointSize(50);
 	SetPenColor("White");
 	drawLabel(0.95,H-2,Time_s);
 	SetPenColor("Red");
-	++Time;
+	++Time,lst=clock();
 	sprintf(Time_s,"%02d:%02d:%02d",Time/3600,Time/60%60,Time%60);
 	// printf("%s\n",Time_s);
 	drawLabel(0.95,H-2,Time_s);
@@ -114,17 +148,23 @@ void SideBar(){
 	registerTimerEvent(Clock);
 	startTimer(GenUIID(666),1000);
 }
-
+void GetHint(){
+	SetPointSize(30);
+	setButtonColors("White","Green","Yellow","Yellow",1);
+	if(button(GenUIID(999),0.95,5.0,3.0,0.9,"提   示")) Get_Fastest();
+}
 void TabBar(){registerMouseEvent(MouseEvent_TabBar);}
 void MouseEvent_TabBar(int x,int y,int button,int event){
 	uiGetMouse(x,y,button,event);
 	TabBar_Show();
 }
 void TabBar_Show(){
+	GetHint();
 	static char *MenuListGame[]={
 		"Game",
 		"New Game",
 		"Save Game",
+		"Menu",
 		"Exit"
 	};
 	static char *MenuListHelp[]={
@@ -136,20 +176,27 @@ void TabBar_Show(){
 	setMenuColors("White","Orange","Blue","Green",0);
 	SetPointSize(20);
 	SetPenSize(2);
-	int opt1=menuList(GenUIID(101),W-H-0.5,H-0.5,1,1.5,0.5,MenuListGame,4);
+	int opt1=menuList(GenUIID(101),W-H-0.5,H-0.5,1,1.5,0.5,MenuListGame,5);
 	switch(opt1){
 		case 1:cancelTimerEvent(),cancelMouseEvent();Menu_Choose();break;
-		case 2:cancelTimerEvent(),cancelMouseEvent();Page_Victory();break;
-		case 3:Page_Exit();break;
+		case 2:cancelTimerEvent(),cancelMouseEvent();SaveGame();break;
+		case 3:cancelTimerEvent(),cancelMouseEvent();Menu_Main();break;
+		case 4:Page_Exit();break;
 	}
 	setMenuColors("White","Orange","Blue","Green",0);
 	SetPointSize(20);
 	SetPenSize(2);
 	int opt2=menuList(GenUIID(102),W-H+1,H-0.5,1,1.2,0.5,MenuListHelp,3);
 	switch(opt2){
-		case 2:Page_About();break;
+		case 2:cancelTimerEvent();cancelMouseEvent();Page_About();break;
 	}
 	printf("%d %d\n",opt1,opt2);
 	if(!opt1||!opt2) DisplayClear(),SideBar(),DrawMaze();
+}
+void ReDraw(){
+	DisplayClear();
+	SideBar();TabBar();DrawMaze();
+	if(clock()-lst>=1000) lst=clock(),Clock();
+	SetPointSize(50),SetPenColor("Red"),drawLabel(0.95,GetWindowHeight()-2,Time_s);
 }
 #endif

@@ -3,6 +3,10 @@
 
 #include"Game.h"
 #include<string.h>
+#include<stdlib.h>
+#include"extgraph.h"
+#include"graphics.h"
+#include"imgui.h"
 
 extern int N;
 extern int mp[maxn][maxn];
@@ -23,13 +27,29 @@ Pos BFS(int sx,int sy){//BFS求最短路，以(sx,sy)为起点
             if(mp[nx][ny]==-2) return Q[Tl];
         }
     }
+    Q[1].step=-1;
+    return Q[1];
 }
 extern int Step;
-extern Pos Path[maxn*maxn];
-void Get_Fastest(int sx,int sy){
-    Pos T=BFS(sx,sy);
-    Step=T.step,memset(Path,0,sizeof(Path));
-    while(T.step) Path[T.step]=T,T=Pre[T.x][T.y];
+void Get_Fastest(){
+    Pos T=BFS(Xp,Yp);
+    if(!~T.step){
+        double W=GetWindowWidth(),H=GetWindowHeight();
+        SetPointSize(50),SetPenColor("Red");
+        drawBox(W-H+2,H/2,4,2,1,"Error!",'C',"Yellow");
+        Pause(1.0);
+        DisplayClear();
+        ReDraw();
+        return;
+    }
+    Step=T.step;
+    Tp p=NULL;
+    while(T.step){
+        Tp q=(Tp)malloc(sizeof(Pos));
+        q->x=T.x,q->y=T.y,q->step=T.step;
+        q->next=p,p=q,T=Pre[T.x][T.y];
+    }
+    ShowPath(p);
 }
 
 #endif
