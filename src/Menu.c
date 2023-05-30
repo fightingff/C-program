@@ -21,6 +21,11 @@ void Menu_Choose_Show();
 void TabBar_Show();
 //预声明MouseEvent函数
 
+void MenuCSS(){
+	setMenuColors("White","Orange","Blue","Green",0);
+	SetPointSize(20);
+	SetPenSize(2);
+}
 void Menu_Main(){registerMouseEvent(MouseEvent_Main);}
 void Menu_Choose(){tp_first=1;registerMouseEvent(MouseEvent_Choose);}
 void MouseEvent_Main(int x,int y,int button,int event){
@@ -203,9 +208,7 @@ void TabBar_Show(){//选项卡
 		"About"
 	};
 	double W=GetWindowWidth(),H=GetWindowHeight();
-	setMenuColors("White","Orange","Blue","Green",0);
-	SetPointSize(20);
-	SetPenSize(2);
+	MenuCSS();
 	int opt1=menuList(GenUIID(101),W-H-0.5,H-0.5,1,1.5,0.5,MenuListGame,5);
 	switch(opt1){
 		case 1:cancelTimerEvent(),cancelMouseEvent();Menu_Choose();break;//新游戏
@@ -213,9 +216,7 @@ void TabBar_Show(){//选项卡
 		case 3:cancelTimerEvent(),cancelMouseEvent();Menu_Main();break;  //返回主菜单
 		case 4:Page_Exit();break;										//退出游戏
 	}
-	setMenuColors("White","Orange","Blue","Green",0);
-	SetPointSize(20);
-	SetPenSize(2);
+	MenuCSS();
 	int opt2=menuList(GenUIID(102),W-H+1,H-0.5,1,1.2,0.5,MenuListHelp,3);
 	switch(opt2){
 		case 1:cancelTimerEvent();cancelMouseEvent();Page_Info();break;//操作信息

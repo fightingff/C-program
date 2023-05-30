@@ -121,11 +121,10 @@ void Page_Info(){//操作说明
 	registerMouseEvent(MouseEvent_Back);
 }
 
-void Page_Edit(){
-	W=GetWindowWidth(),H=GetWindowHeight();
-	display();
-}
 
+void DrawMenu_Edit();
+void DrawButton_Edit();
+void DrawMaze_Edit();
 void display()
 {
 	DisplayClear();
@@ -133,7 +132,10 @@ void display()
 	DrawButton_Edit();
 	DrawMaze_Edit();
 }
-
+void Page_Edit(){
+	W=GetWindowWidth(),H=GetWindowHeight();
+	display();
+}
 void DrawMenu_Edit()
 {
 	static char * menuListFile[] = {"File",  
@@ -143,7 +145,8 @@ void DrawMenu_Edit()
 		"速成模板  | Ctrl-P",
 		"重新绘制  | Ctrl-R"};
 	static char * menuListHelp[] = {"Help",
-		"关于本软件",
+		"About",
+		"Menu",
 		"Exit    | Ctrl-E"};
 	double fH = GetFontHeight();
 	double x = 0; 
@@ -155,22 +158,29 @@ void DrawMenu_Edit()
 	
 	drawMenuBar(0,y-h,W,h);
 	// File 
+	MenuCSS();
 	selection = menuList(GenUIID(0), x, y-h, w, wlist, h, menuListFile, sizeof(menuListFile)/sizeof(menuListFile[0]));
 	if( selection==2 ) SaveGame(); // 2) Problem : will flash into Menu_choose
 	else if( selection==1 ) LoadGame();
 	
 	// Tool 
+	MenuCSS();
 	selection = menuList(GenUIID(0),x+w,  y-h, w, wlist,h, menuListTool, sizeof(menuListTool)/sizeof(menuListTool[0]));
 	if( selection==1 ) {
-		GeneratingMaze_Hard();
+		GeneratingMaze(2);
 	}
 	else if ( selection==2 ) InitMaze_Edit();
 	
 	// Help ???
+	MenuCSS();
 	selection = menuList(GenUIID(0),x+2*w,y-h, w, wlist, h, menuListHelp,sizeof(menuListHelp)/sizeof(menuListHelp[0]));
-	if( selection==2 ) exit(-1); //  5) to be improved : back to the previous page
+	if( selection==3 ) Page_Exit(); //  5) to be improved : back to the previous page
 	else if ( selection==1 ){
+		Page_About();
+		
 		// 4) information can be added
+	}else if ( selection==2 ){
+		Menu_Main();
 	}
 }
 
@@ -207,14 +217,6 @@ void DrawButton_Edit()
 	}
 	
 }
-void DrawMaze_Edit()
-{
-	SetPenSize(2);
-	SetPenColor("Gray");
-	PaintUnits(imaze.x, imaze.y - imaze.ulen, imaze.slen); 
-	drawLines(imaze.x, imaze.y - imaze.ulen, imaze.mlen);
-	
-}
 
 void drawLines(double X, double Y ,double len)
 {
@@ -227,5 +229,15 @@ void drawLines(double X, double Y ,double len)
 		MovePen(X,Y-ul*(i-1)); DrawLine(mlen, 0);
 	}
 }
+
+void DrawMaze_Edit()
+{
+	SetPenSize(2);
+	SetPenColor("Gray");
+	PaintUnits(imaze.x, imaze.y - imaze.ulen, imaze.slen); 
+	drawLines(imaze.x, imaze.y - imaze.ulen, imaze.mlen);
+	
+}
+
 #endif
 

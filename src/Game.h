@@ -26,6 +26,7 @@ Pos *Head_List,*Tail_List;//记录玩家操作
 void Menu_Main();//主菜单
 void Get_Fastest();//求最短路
 
+void MenuCSS();//菜单样式
 void Clock();//计时器
 void TabBar();//上方标签栏
 void SideBar();//侧边栏
@@ -45,6 +46,7 @@ void GeneratingMaze(int rank);//生成迷宫
 
 void DrawMaze();//绘制迷宫
 void ShowPath(Pos *p);//显示路径
+void PaintUnits(double X, double Y,double len);//绘制迷宫单元
 
 typedef struct Record_{
     int rank,cost;

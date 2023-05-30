@@ -13,7 +13,12 @@ extern struct Imaze imaze;
 
 void MouseEvent_Edit(int x ,int y, int button ,int event);
 void Edit(){registerMouseEvent(MouseEvent_Edit);}
-
+int CheckArea(double x, double y)
+{
+	//printf("\nmaze's x = %lf, maze's y = %lf",imaze.x, imaze.y);
+	//printf("x = %lf, y = %lf\n",x,y);
+	return ( x>=imaze.x && x<=imaze.x+imaze.mlen && y<=imaze.y && y>=imaze.y-imaze.mlen) ;
+}
 void MouseEvent_Edit(int x, int y, int button, int event)
 {
 	uiGetMouse(x,y,button,event);
@@ -40,12 +45,6 @@ void MouseEvent_Edit(int x, int y, int button, int event)
 		}
 	}
 	Page_Edit();
-}
-int CheckArea(double x, double y)
-{
-	//printf("\nmaze's x = %lf, maze's y = %lf",imaze.x, imaze.y);
-	//printf("x = %lf, y = %lf\n",x,y);
-	return ( x>=imaze.x && x<=imaze.x+imaze.mlen && y<=imaze.y && y>=imaze.y-imaze.mlen) ;
 }
 void InitMaze_Edit(){
 	for(int i=1; i<= N; i++)
