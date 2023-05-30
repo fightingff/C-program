@@ -2,12 +2,12 @@
 #define GAME_H
 
 #define maxn 2005
-int N; //åœ°å›¾å¤§å°
-int Xp,Yp;//å½“å‰ä½ç½®
+int N; //µØÍ¼´óĞ¡
+int Xp,Yp;//µ±Ç°Î»ÖÃ
 int mp[maxn][maxn];
-//å­˜å‚¨åœ°å›¾ 0è¡¨ç¤ºç©º 1è¡¨ç¤ºéšœç¢ï¼Œ-1è¡¨ç¤ºèµ·ç‚¹ï¼Œ-2è¡¨ç¤ºç»ˆç‚¹
-int Time; //æ¸¸æˆæ—¶é—´
-int Rank; //æ¸¸æˆéš¾åº¦
+//´æ´¢µØÍ¼ 0±íÊ¾¿Õ 1±íÊ¾ÕÏ°­£¬-1±íÊ¾Æğµã£¬-2±íÊ¾ÖÕµã
+int Time; //ÓÎÏ·Ê±¼ä
+int Rank; //ÓÎÏ·ÄÑ¶È
 struct Imaze{
     int stx,sty,len;
 }imaze;// drawed maze information
@@ -16,44 +16,44 @@ typedef struct Point{
     int x,y,step;
     struct Point *next;
 }Pos;
-int Step;//æ­¥æ•°
+int Step;//²½Êı
 
 int Total;
-Pos *Head_List,*Tail_List;//è®°å½•ç©å®¶æ“ä½œ
+Pos *Head_List,*Tail_List;//¼ÇÂ¼Íæ¼Ò²Ù×÷
 
-void Menu_Main();
-int Check(int x,int y);
-void Get_Fastest();
+void Menu_Main();//Ö÷²Ëµ¥
+void Get_Fastest();//Çó×î¶ÌÂ·
 
-void Clock();
-void TabBar();
-void SideBar();
-void ReDraw();
+void Clock();//¼ÆÊ±Æ÷
+void TabBar();//ÉÏ·½±êÇ©À¸
+void SideBar();//²à±ßÀ¸
+void ReDraw();//È«Í¼ÖØ»æ
 
-void Page_About();
-void Page_Exit(); 
-void Page_Load();
-void Page_Victory();
+void Page_About();//¹ØÓÚÒ³Ãæ
+void Page_Exit(); //ÍË³öÒ³Ãæ
+void Page_Load();//¼ÓÔØÒ³Ãæ
+void Page_Victory();//Ê¤ÀûÒ³Ãæ
+void Page_Info();//ĞÅÏ¢Ò³Ãæ
 
-void MouseEditMaze();
+void MouseEditMaze();//Êó±ê±à¼­µØÍ¼
 
-void GeneratingMaze(int rank);
+void GeneratingMaze(int rank);//Éú³ÉÃÔ¹¬
 
-void DrawMaze();
-void ShowPath(Pos *p);
+void DrawMaze();//»æÖÆÃÔ¹¬
+void ShowPath(Pos *p);//ÏÔÊ¾Â·¾¶
 
 typedef struct Record_{
     int rank,cost;
     struct Record_ *next;
-}Record;
-void LoadRecord();
-void LoadGame();
-void SaveGame();
-int UpdateRecord();
-int GetPlay();
-void LoadRecord_i(int id);
+}Record;//×î¼Ñ¼ÇÂ¼
+void LoadRecord();//ÔØÈë×î¼Ñ¼ÇÂ¼
+void LoadGame();//ÔØÈë±£´æµÄÓÎÏ·
+void SaveGame();//±£´æÓÎÏ·
+int UpdateRecord();//¸üĞÂ×î¼Ñ¼ÇÂ¼
+int GetPlay();//»ñÈ¡ÓÎÏ·±êºÅ
+void LoadRecord_i(int id);//ÔØÈëµÚid¸ö×î¼Ñ¼ÇÂ¼
 
-void Go();
+void Go();//ÒÆ¶¯
 
 typedef Record *Rp;
 typedef Pos *Tp;

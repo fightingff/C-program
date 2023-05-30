@@ -9,7 +9,7 @@
 
 static int Colors_N=8;
 static char *Colors[]={"Red","Orange","Yellow","Green","Blue","Violet","Magenta","Cyan"};
-void MouseEvent_About(int x,int y,int btn,int event){//é¼ æ ‡äº‹ä»¶
+void MouseEvent_Back(int x,int y,int btn,int event){//Êó±êµã»÷·µ»ØÊÂ¼þ
 	uiGetMouse(x,y,btn,event);
 	double W=GetWindowWidth(),H=GetWindowHeight();
 	double X=W/2,Y=H/2;
@@ -19,7 +19,7 @@ void MouseEvent_About(int x,int y,int btn,int event){//é¼ æ ‡äº‹ä»¶
 		ReDraw();
 	}
 }
-void Page_About(){//é€€å‡ºçš„æ–‡å­—
+void Page_About(){//ÍË³öµÄÎÄ×Ö
 	double W=GetWindowWidth(),H=GetWindowHeight();
 	double X=W/2,Y=H/2;
 	DisplayClear();
@@ -32,9 +32,9 @@ void Page_About(){//é€€å‡ºçš„æ–‡å­—
 	DrawTextString("Thank you!");
 	MovePen(X-1.2,Y+0.5);
 	DrawTextString("Author: FMH & WZJ");
-	registerMouseEvent(MouseEvent_About);
+	registerMouseEvent(MouseEvent_Back);
 }
-void Page_Exit(){//é€€å‡ºç•Œé?
+void Page_Exit(){//ÍË³ö½çÃæ
 	DisplayClear();
 	cancelMouseEvent();
 	cancelTimerEvent();
@@ -42,26 +42,27 @@ void Page_Exit(){//é€€å‡ºç•Œé?
 	const double Pi=acos(-1),R=2,N=60;
 	double W=GetWindowWidth(),H=GetWindowHeight();
 	double X=W/2,Y=H/2;
-	for(int i=0;i<=N*2;i++){//é€€å‡ºçš„åŠ¨ç”»
+	for(int i=0;i<=N*2;i++){//ÍË³öµÄ¶¯»­
 		SetPenColor(Colors[i%Colors_N]);
 		MovePen(X+R+R*i/N*cos(2.0*Pi/N*i),Y+R*i/N*sin(2.0*Pi/N*i));
 		DrawArc(R*i/N,0,360);
 		Pause(0.01);
 	}
 	Page_About();
-	//å»¶è¿ŸåŽé€€å‡?
+	cancelMouseEvent();
+	//ÑÓ³ÙºóÍË³ö
 	Pause(3.0);
 	ExitGraphics();
 }
 
-void Page_Load(){
+void Page_Load(){//¼ÓÔØ½çÃæ
 	DisplayClear();
 	cancelMouseEvent();
 	double W=GetWindowWidth(),H=GetWindowHeight();
 	double X=W/2,Y=H/2;
 	SetPenSize(2);
 	const double Pi=acos(-1),R=2,N=60;
-	for(int i=N*2;i>=0;i--){//åŠ è½½çš„åŠ¨ç”?
+	for(int i=N*2;i>=0;i--){//¼ÓÔØµÄ¶¯»­£¬ÂÝÐýÏß
 		SetPenColor(Colors[i%Colors_N]);
 		MovePen(X+R+R*i/N*cos(2.0*Pi/N*i),Y+R*i/N*sin(2.0*Pi/N*i));
 		DrawArc(R*i/N,0,360);
@@ -69,7 +70,7 @@ void Page_Load(){
 	}
 }
 
-void EraseMap(){
+void EraseMap(){//ÓÃÌõÎÆ²Á³ýµØÍ¼
 	double W=GetWindowWidth(),H=GetWindowHeight();
 	double X=W-H-1.2,Y=H,Edge=H;
 	const int N=100;
@@ -81,7 +82,7 @@ void EraseMap(){
 		Pause(0.01);
 	}
 }
-void Page_Victory(){
+void Page_Victory(){//Ê¤Àû½çÃæ
 	Clock();
 	EraseMap();
 	cancelTimerEvent();
@@ -98,6 +99,22 @@ void Page_Victory(){
 	}
 	Pause(5.0);
 	Menu_Main();
+}
+
+void Page_Info(){//²Ù×÷ËµÃ÷
+	double W=GetWindowWidth(),H=GetWindowHeight();
+	double X=W/2,Y=H/2;
+	DisplayClear();
+	SetPenSize(5);
+	SetPenColor("Green");
+	drawRectangle(X-4,Y-0.5,10.0,3.0,0);
+	SetPenColor("Orange");
+	SetPointSize(30);
+	MovePen(X-3.2,Y+1.5);
+	DrawTextString("·½Ïò¼ü / [W][A][S][D]   ¿ØÖÆÒÆ¶¯");
+	MovePen(X-3.2,Y+0.5);
+	DrawTextString("ÓÃ×î¶ÌµÄÊ±¼äµ½´ïÖÕµã£¡");
+	registerMouseEvent(MouseEvent_Back);
 }
 #endif
 

@@ -44,7 +44,7 @@ void Get_Fastest(){
     }
     Step=T.step;
     Tp p=NULL;
-    while(T.step){
+    while(T.step){//用链表存储路径
         Tp q=(Tp)malloc(sizeof(Pos));
         q->x=T.x,q->y=T.y,q->step=T.step;
         q->next=p,p=q,T=Pre[T.x][T.y];

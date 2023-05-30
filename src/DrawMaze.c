@@ -18,7 +18,7 @@ void PaintUnits(double X, double Y,double len)
     {
         for(int j=2; j<=N-1;++j)
         {
-            MovePen(X+(j-2)*ul, Y-(i-2)*ul);//è½¬ç½®è¿‡æ¥
+            MovePen(X+(j-2)*ul, Y-(i-2)*ul);//×ªÖÃ¹ýÀ´
             if(mp[i][j] != 0||((i==Xp&&j==Yp)) )
 			{
 				switch(mp[i][j])
@@ -45,7 +45,7 @@ void PaintUnits(double X, double Y,double len)
 
 void DrawMaze()
 {
-    //(st, st)ä¸ºè¿·å®«å·¦ä¸Šè§’ï¼Œlenä¸ºè¿·å®«è¾¹é•¿ï¼Œä¸¤è€…å¯ä»¥æ”¹ä¸ºå¤–éƒ¨ä¼ å…¥
+    //(st, st)ÎªÃÔ¹¬×óÉÏ½Ç£¬lenÎªÃÔ¹¬±ß³¤£¬Á½Õß¿ÉÒÔ¸ÄÎªÍâ²¿´«Èë
     double W=GetWindowWidth(),H=GetWindowHeight(),len = H*0.9;
     SetPenColor("Gray");
     SetPenSize(2);

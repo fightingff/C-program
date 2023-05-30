@@ -1,6 +1,6 @@
 //author: Fmh & Wzj
 //20230506 
-//Cå¤§ä½œä¸š  è¿·å®«
+//C´ó×÷Òµ  ÃÔ¹¬
 #ifndef GENERATINGMAZE_C
 #define GENERATINGMAZE_C
 
@@ -14,8 +14,8 @@
 extern int N;
 extern int mp[maxn][maxn];
 extern int Rank;
-//æ§åˆ¶å¤æ‚åº¦ï¼Œrankæ•°å€¼è¶Šå¤§å¤æ‚åº¦è¶Šä½ï¼Œ>=0
-//å­˜å‚¨åœ°å›¾ 0è¡¨ç¤ºè·¯ 1è¡¨ç¤ºå¢™ 3è¡¨ç¤ºé™·é˜± -1è¡¨ç¤ºèµ·ç‚¹ï¼Œ-2è¡¨ç¤ºç»ˆç‚¹
+//¿ØÖÆ¸´ÔÓ¶È£¬rankÊıÖµÔ½´ó¸´ÔÓ¶ÈÔ½µÍ£¬>=0
+//´æ´¢µØÍ¼ 0±íÊ¾Â· 1±íÊ¾Ç½ 3±íÊ¾ÏİÚå -1±íÊ¾Æğµã£¬-2±íÊ¾ÖÕµã
 typedef enum{
     Route,Wall,Trap     
 }signs;
@@ -117,11 +117,11 @@ int QueueSize(Queue* q)
     
 }
 
-void MazeDfs(int x, int y) // ä»ï¼ˆx,y) å¼€å§‹ç”Ÿæˆåœ°å›¾
+void MazeDfs(int x, int y) // ´Ó£¨x,y) ¿ªÊ¼Éú³ÉµØÍ¼
 {
     mp[x][y] = Route;
     int dir[4][2]={{0,1},{0,-1},{1,0},{-1,0}};
-    for (int i = 0; i < 4; i++) //å®ç°æ¯æ¬¡æ‹“å±•æ–¹å‘éšæœº
+    for (int i = 0; i < 4; i++) //ÊµÏÖÃ¿´ÎÍØÕ¹·½ÏòËæ»ú
     {
         int r=rand()%4;
         int temp=dir[0][0];
@@ -136,16 +136,16 @@ void MazeDfs(int x, int y) // ä»ï¼ˆx,y) å¼€å§‹ç”Ÿæˆåœ°å›¾
         int dx=x;
         int dy=y;
         //
-        int range = 1 + (Rank == 0 ? 0 : rand() % Rank); //range å†³å®šæ­¤æ¬¡æœè¿™ä¸ªæ–¹å‘èµ°å¤šè¿œ
+        int range = 1 + (Rank == 0 ? 0 : rand() % Rank); //range ¾ö¶¨´Ë´Î³¯Õâ¸ö·½Ïò×ß¶àÔ¶
         while (range > 0)
         {
             dx += dir[i][0];
             dy += dir[i][1];
 
-            if (mp[dx][dy] == Route) break; //é˜²æ­¢èµ°å›å¤´è·¯
+            if (mp[dx][dy] == Route) break; //·ÀÖ¹×ß»ØÍ·Â·
 
             int count=0;
-            for( int j = dx -1; j <= dx + 1; j++) //é˜²æ­¢å½¢æˆç¯
+            for( int j = dx -1; j <= dx + 1; j++) //·ÀÖ¹ĞÎ³É»·
                 for( int k = dy -1; k <= dy + 1; k++)
                     if ( (abs(j-dx)+abs(k-dy)) == 1 && mp[j][k] == Route ) count++;
             if ( count >= 2 ) break;
@@ -153,7 +153,7 @@ void MazeDfs(int x, int y) // ä»ï¼ˆx,y) å¼€å§‹ç”Ÿæˆåœ°å›¾
             range--;
             mp[dx][dy] = Route;
         }
-        if ( range <= 0 ) MazeDfs( dx, dy ); //ç»§ç»­ä»¥æ­¤èŠ‚ç‚¹é€’å½’
+        if ( range <= 0 ) MazeDfs( dx, dy ); //¼ÌĞøÒÔ´Ë½Úµãµİ¹é
 
     }
     
@@ -171,8 +171,8 @@ void GeneratingMaze_Hard()
         mp[N][i] = Route;
         mp[i][N] = Route;
     }
-    MazeDfs(3,3); //  èµ·ç‚¹å®šä¸º(1,1)ä¼šäº§ç”Ÿç¯ï¼Œå‡ºé”™
-    while(1)      //  éšæœºå‡ºå£
+    MazeDfs(3,3); //  Æğµã¶¨Îª(1,1)»á²úÉú»·£¬³ö´í
+    while(1)      //  Ëæ»ú³ö¿Ú
     {
         int i = rand()%(N/2), j = rand()%(N/2);
         if( i>1 && j>1 && mp[N-i][N-j] == Route )
@@ -181,7 +181,7 @@ void GeneratingMaze_Hard()
             break;
         }
     }
-    for ( int k=pow(N/6,2); k>0; k--) //ä¸´æ—¶æƒ³æ³•ï¼Œæ·»åŠ éšæœºå¤šä¸ªé™·é˜±
+    for ( int k=pow(N/6,2); k>0; k--) //ÁÙÊ±Ïë·¨£¬Ìí¼ÓËæ»ú¶à¸öÏİÚå
     {
         while (1)
         {
@@ -198,7 +198,7 @@ void GeneratingMaze_Hard()
 
 }
 
-void GeneratingMaze_Medium() // è§„æ¨¡å°äº 15*15ï¼
+void GeneratingMaze_Medium() // ¹æÄ£Ğ¡ÓÚ 15*15£¡
 {
    srand(GetTickCount());
    for(int i=1; i<=N; ++i )

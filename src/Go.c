@@ -10,13 +10,13 @@ void Go_Move(int key,int event);
 void Go(){registerKeyboardEvent(Go_Move);}
 const int Dp[4][2]={{0,-1},{-1,0},{0,1},{1,0}};
 const char Dc[]="AWDS";
-int Get(int key){
+int Get(int key){//获取按键
     if(key>=37&&key<=40) return key-37;
     for(int i=0;i<4;i++) if(key==Dc[i]) return i;
     return -1;
 }
-int OK(int x,int y){return (x>=1&&x<=N&&y>=1&&y<=N&&mp[x][y]!=1);}
-void Go_Move(int key,int event){
+int OK(int x,int y){return (x>=1&&x<=N&&y>=1&&y<=N&&mp[x][y]!=1);}//地图合法性判断
+void Go_Move(int key,int event){//移动
     uiGetKeyboard(key,event);
     if(event==KEY_UP) return;
     int f=Get(key);

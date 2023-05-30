@@ -11,7 +11,7 @@
 static int Records_N=0;
 static Rp Head=NULL,Tail=NULL;
 extern int Xp,Yp;
-void LoadRecord(){
+void LoadRecord(){//读取最佳记录
     FILE *fp=fopen("Records.txt","r");
     Records_N=0,Head=Tail=NULL;
     if(fp!=NULL){
@@ -25,38 +25,38 @@ void LoadRecord(){
         fclose(fp);
     }
 }
-int GetPlay(){
+int GetPlay(){//获取当前游戏的id
     Rp p=Head;
     for(int i=1;i<=Records_N;i++,p=p->next) if(p->rank==Rank) return Time=p->cost,i;
     return -1; 
 }
-void Modify(int id){
+void Modify(int id){//更新最佳记录
     char filename[20]="";
     sprintf(filename,"Record%d.txt",id);
     FILE *fp=fopen(filename,"w");
     fprintf(fp,"%d\n",Total);
     Tp p=Head_List,q;
-    for(int i=1;i<=Total;i++){
+    for(int i=1;i<=Total;i++){//保存路径
         fprintf(fp,"%d %d\n",p->x,p->y);
         q=p,p=p->next;
         free(q);
     }
     fclose(fp);
 
-    sprintf(filename,"Game%d.txt",id);
+    sprintf(filename,"Game%d.txt",id);//保存地图
     fp=fopen(filename,"w");
     fprintf(fp,"%d\n",N);
     for(int i=1;i<=N;i++,fprintf(fp,"\n")) 
       for(int j=1;j<=N;j++) fprintf(fp,"%d ",mp[i][j]);
     fclose(fp);
 }
-void LoadRecord_i(int id){
+void LoadRecord_i(int id){//读取第id个最佳记录
     char filename[20]="";
     sprintf(filename,"Record%d.txt",id);
     FILE *fp=fopen(filename,"r");
     fscanf(fp,"%d",&Total);
     Head_List=Tail_List=NULL;
-    for(int i=1;i<=Total;i++){
+    for(int i=1;i<=Total;i++){//读取路径
         Tp p=(Tp)malloc(sizeof(Pos));
         fscanf(fp,"%d%d",&p->x,&p->y);
         if(Head_List==NULL) Head_List=p;else Tail_List->next=p;
@@ -65,7 +65,7 @@ void LoadRecord_i(int id){
     if(Tail_List!=NULL) Tail_List->next=NULL;
     fclose(fp);
 
-    sprintf(filename,"Game%d.txt",id);
+    sprintf(filename,"Game%d.txt",id);//读取地图
     fp=fopen(filename,"r");
     fscanf(fp,"%d",&N);
     for(int i=1;i<=N;i++) 
@@ -73,7 +73,7 @@ void LoadRecord_i(int id){
     fclose(fp);
 }
 
-int UpdateRecord(){
+int UpdateRecord(){//更新最佳记录
     LoadRecord();
     int id=0;Rp p=Head;
     for(int i=1;i<=Records_N;i++,p=p->next) if(p->rank==Rank) {id=i;break;}
@@ -93,19 +93,19 @@ int UpdateRecord(){
     fprintf(fp,"%d\n",Records_N);
     p=Head;
     for(int i=1;i<=Records_N;i++,p=p->next) fprintf(fp,"%d %d\n",p->rank,p->cost);
-    return id;
     fclose(fp);
+    return id;
 }
 
-void SaveGame(){
-    FILE *fp=fopen("Game.txt","w");
+void SaveGame(){//将当前游戏保存到文件
+    FILE *fp=fopen("Game.txt","w");//保存当前状态
     fprintf(fp,"%d %d\n",N,Rank);
     for(int i=1;i<=N;i++,fprintf(fp,"\n"))
       for(int j=1;j<=N;j++) fprintf(fp,"%d ",mp[i][j]);
     fprintf(fp,"%d %d\n",Xp,Yp);
     fprintf(fp,"%d\n",Time);
     fclose(fp);
-    Modify(0);
+    Modify(0);//将路径也存下
     double W=GetWindowWidth(),H=GetWindowHeight();
     SetPointSize(50),SetPenColor("Red");
     drawBox(W-H+2,H/2,4,2,1,"保存成功",'C',"Yellow");
@@ -113,7 +113,7 @@ void SaveGame(){
     DisplayClear();
     ReDraw();
 }
-void LoadGame(){
+void LoadGame(){//回到上次保存的游戏
     FILE *fp=fopen("Game.txt","r");
     fscanf(fp,"%d%d",&N,&Rank);
     for(int i=1;i<=N;i++)
