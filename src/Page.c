@@ -7,7 +7,7 @@
 #include"imgui.h"
 #include"extgraph.h"
 
-static int Colors_N=8;
+static int Colors_N=6;
 static char *Colors[]={"Red","Orange","Yellow","Green","Blue","Violet","Magenta","Cyan"};
 void MouseEvent_Back(int x,int y,int btn,int event){//鼠标点击返回事件
 	uiGetMouse(x,y,btn,event);
@@ -39,14 +39,16 @@ void Page_Exit(){//退出界面
 	cancelMouseEvent();
 	cancelTimerEvent();
 	SetPenSize(2);
-	const double Pi=acos(-1),R=2,N=60;
 	double W=GetWindowWidth(),H=GetWindowHeight();
+	const double Pi=acos(-1),N=600,theta=Pi/3+Pi/180;
 	double X=W/2,Y=H/2;
-	for(int i=0;i<=N*2;i++){//退出的动画
+	MovePen(X,Y);
+	for(int i=1;i<=N;i++){
 		SetPenColor(Colors[i%Colors_N]);
-		MovePen(X+R+R*i/N*cos(2.0*Pi/N*i),Y+R*i/N*sin(2.0*Pi/N*i));
-		DrawArc(R*i/N,0,360);
-		Pause(0.01);
+		double R=i/200.0;
+		MovePen(X+R*cos(theta*i)+R,Y+R*sin(theta*i));
+		DrawArc(R,0,360);
+		Pause(0.005);
 	}
 	Page_About();
 	cancelMouseEvent();
@@ -61,12 +63,12 @@ void Page_Load(){//加载界面
 	double W=GetWindowWidth(),H=GetWindowHeight();
 	double X=W/2,Y=H/2;
 	SetPenSize(2);
-	const double Pi=acos(-1),R=2,N=60;
-	for(int i=N*2;i>=0;i--){//加载的动画，螺旋线
+	const double Pi=acos(-1),N=600,theta=Pi/3+Pi/180;
+	MovePen(X,Y);
+	for(int i=1;i<=N;i++){
 		SetPenColor(Colors[i%Colors_N]);
-		MovePen(X+R+R*i/N*cos(2.0*Pi/N*i),Y+R*i/N*sin(2.0*Pi/N*i));
-		DrawArc(R*i/N,0,360);
-		Pause(0.01);
+		DrawLine(i/100.0*cos(theta*i),i/100.0*sin(theta*i));
+		Pause(0.005);
 	}
 }
 
