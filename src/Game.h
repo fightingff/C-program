@@ -8,14 +8,16 @@ int mp[maxn][maxn];
 //存储地图 0表示空 1表示障碍，-1表示起点，-2表示终点
 int Time; //游戏时间
 int Rank; //游戏难度
-struct Imaze{
-    int stx,sty,len;
-}imaze;// drawed maze information
+int edit_mode; //修改模式 
 
 typedef struct Point{
     int x,y,step;
     struct Point *next;
 }Pos;
+struct Imaze{
+	double x,y,mlen,ulen,slen;
+}imaze;//Edit模式中显示的矩阵信息 
+
 int Step;//步数
 
 int Total;
@@ -28,14 +30,16 @@ void Clock();//计时器
 void TabBar();//上方标签栏
 void SideBar();//侧边栏
 void ReDraw();//全图重绘
+void SetFigures_Edit();//设置Edit初始参数 
+void InitMaze_Edit();//设置空白迷宫 
 
 void Page_About();//关于页面
 void Page_Exit(); //退出页面
+void Page_Edit(); // 手动修改迷宫界面 
 void Page_Load();//加载页面
 void Page_Victory();//胜利页面
 void Page_Info();//信息页面
 
-void MouseEditMaze();//鼠标编辑地图
 
 void GeneratingMaze(int rank);//生成迷宫
 
@@ -54,6 +58,7 @@ int GetPlay();//获取游戏标号
 void LoadRecord_i(int id);//载入第id个最佳记录
 
 void Go();//移动
+void Edit();//手动修改 
 
 typedef Record *Rp;
 typedef Pos *Tp;

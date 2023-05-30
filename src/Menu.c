@@ -9,8 +9,11 @@
 
 int tp_first;
 int lst;//尽力修正时钟
+extern struct Imaze imaze;
+
 void MouseEvent_Main(int x,int y,int button,int event);
 void MouseEvent_Choose(int x,int y,int button,int event);
+void MouseEvent_Edit(int x, int y, int button,int event);
 void MouseEvent_TabBar(int x,int y,int button,int event);
 void MouseEvent_Hint(int x,int y,int button,int event);
 void Menu_Main_Show();
@@ -53,7 +56,8 @@ void Menu_Main_Show(){//显示主菜单
 	setButtonColors("White","Green","White","Blue",1);
 	if(button(GenUIID(1),X,Y-=dy,3.0,1.0,"绘制地图")) {
 		cancelMouseEvent();
-		MouseEditMaze(); 
+		SetFigures_Edit();
+		Edit();
 		return;
 	}
 	setButtonColors("White","Red","White","Blue",1);

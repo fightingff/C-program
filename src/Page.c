@@ -7,6 +7,8 @@
 #include"imgui.h"
 #include"extgraph.h"
 
+static double W,H; //window width & height
+extern struct Imaze imaze;
 static int Colors_N=6;
 static char *Colors[]={"Red","Orange","Yellow","Green","Blue","Violet","Magenta","Cyan"};
 void MouseEvent_Back(int x,int y,int btn,int event){//鼠标点击返回事件
@@ -117,6 +119,113 @@ void Page_Info(){//操作说明
 	MovePen(X-3.2,Y+0.5);
 	DrawTextString("用最短的时间到达终点！");
 	registerMouseEvent(MouseEvent_Back);
+}
+
+void Page_Edit(){
+	W=GetWindowWidth(),H=GetWindowHeight();
+	display();
+}
+
+void display()
+{
+	DisplayClear();
+	DrawMenu_Edit();
+	DrawButton_Edit();
+	DrawMaze_Edit();
+}
+
+void DrawMenu_Edit()
+{
+	static char * menuListFile[] = {"File",  
+		"Open    | Ctrl-R", 
+		"Save    | Ctrl-S"};
+	static char * menuListTool[] = {"Tool",
+		"速成模板  | Ctrl-P",
+		"重新绘制  | Ctrl-R"};
+	static char * menuListHelp[] = {"Help",
+		"关于本软件",
+		"Exit    | Ctrl-E"};
+	double fH = GetFontHeight();
+	double x = 0; 
+	double y = H;
+	double h = fH*1.5; 
+	double w = TextStringWidth(menuListFile[0])*2; 
+	double wlist = TextStringWidth(menuListFile[1])*1.2;
+	int   selection;
+	
+	drawMenuBar(0,y-h,W,h);
+	// File 
+	selection = menuList(GenUIID(0), x, y-h, w, wlist, h, menuListFile, sizeof(menuListFile)/sizeof(menuListFile[0]));
+	if( selection==2 ) SaveGame(); // 2) Problem : will flash into Menu_choose
+	else if( selection==1 ) LoadGame();
+	
+	// Tool 
+	selection = menuList(GenUIID(0),x+w,  y-h, w, wlist,h, menuListTool, sizeof(menuListTool)/sizeof(menuListTool[0]));
+	if( selection==1 ) {
+		GeneratingMaze_Hard();
+	}
+	else if ( selection==2 ) InitMaze_Edit();
+	
+	// Help ???
+	selection = menuList(GenUIID(0),x+2*w,y-h, w, wlist, h, menuListHelp,sizeof(menuListHelp)/sizeof(menuListHelp[0]));
+	if( selection==2 ) exit(-1); //  5) to be improved : back to the previous page
+	else if ( selection==1 ){
+		// 4) information can be added
+	}
+}
+
+void DrawButton_Edit()
+{
+	double fH = GetFontHeight();
+	double h = fH*2;
+	double x =  W*2/3;
+	double y = H - h*4;
+	double w = TextStringWidth("四个汉字")*2; 
+	double dy = h*2;
+	
+	if( button(GenUIID(1), x,y,w,h, "设置道路")) {
+		if( edit_mode == 1 ) edit_mode = 0;
+		else edit_mode = 1;
+		printf("edit_mode is %d\n", edit_mode);
+		}
+	if( button(GenUIID(1), x,y-dy,w,h, "设置障碍")) {
+		if( edit_mode == 2 ) edit_mode = 0;
+		else edit_mode = 2;
+		printf("edit_mode is %d\n", edit_mode);
+		}
+	if( button(GenUIID(1), x,y-dy*2,w,h, "设置起点")) {
+		if( edit_mode == 3 ) edit_mode = 0;
+		else edit_mode = 3;
+	}
+	if( button(GenUIID(1), x,y-dy*3,w,h, "设置终点")) {
+		if( edit_mode == 4 ) edit_mode = 0;
+		else edit_mode = 4;
+	}
+	if( button(GenUIID(1), x,y-dy*4,w,h, "设置陷阱")) {
+		if( edit_mode == 5 ) edit_mode = 0;
+		else edit_mode = 5;
+	}
+	
+}
+void DrawMaze_Edit()
+{
+	SetPenSize(2);
+	SetPenColor("Gray");
+	PaintUnits(imaze.x, imaze.y - imaze.ulen, imaze.slen); 
+	drawLines(imaze.x, imaze.y - imaze.ulen, imaze.mlen);
+	
+}
+
+void drawLines(double X, double Y ,double len)
+{
+	double ul = len/N; 
+	double mlen = len - 2*ul;
+	for (int i=0; i<=N-2; ++i ) {
+		MovePen(X+ul*i,Y+ul); DrawLine(0, -mlen);
+	}
+	for (int i=0; i<=N-2; ++i ) {
+		MovePen(X,Y-ul*(i-1)); DrawLine(mlen, 0);
+	}
 }
 #endif
 
