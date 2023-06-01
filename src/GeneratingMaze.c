@@ -19,102 +19,13 @@ extern int Rank;
 typedef enum{
     Route,Wall,Trap     
 }signs;
-typedef struct Node {
-    int IsWhat;
-    struct Node* next;
-}QNode;
-typedef struct {
-    QNode* head;
-    QNode* tail;
-}Queue;
 
-int IsEmptyQ(Queue* q)
-{
-    return (q->head == NULL);
-}
-Queue* CreateQueue()
-{
-    Queue* q = ( Queue* ) malloc(sizeof(Queue));
-    if(!q) {
-        //printf("No Room!\n");
-        return NULL;
-    }
-    q->head = NULL;
-    q->tail = NULL;
-}
 
-void AddNode(Queue* q, int IsWhat)
-{
-    QNode* qNode = (QNode*) malloc(sizeof(QNode));
-    if(qNode == NULL) {
-        printf("No Room!\n");
-        return;
-    }
-    qNode->IsWhat = IsWhat;
-    qNode->next = NULL;
-    if( q->head == NULL ) q->head = qNode;
-    if( q->tail == NULL ) q->tail = qNode;
-    else {
-        q->tail->next = qNode;
-        q->tail = qNode;
-    }
-}
+int IsOK(int rx,int ry) {return mp[rx-1][ry]+mp[rx+1][ry]+mp[rx][ry-1]+mp[rx][ry+1] > 2;}
 
-void My_DeleteNode(Queue* q, int r)
+void My_Delete(int h[], int r, int tail)
 {
-    if(IsEmptyQ(q)) {
-        printf("Empty Queue!\n");
-        return ;
-    }
-    QNode *p,*pre;
-    pre=q->head;
-    p=pre->next;
-    if( r == 0 ){
-        q->head = q->head->next;
-       free(pre);
-    }
-    else 
-    {
-        while (r>1)
-        {
-            pre = pre->next;
-            p = pre->next;
-            r--;
-        }
-        pre->next = p->next;
-        free(p);
-    }
-}
-
-int GetNode(Queue *q, int r)
-{
-    if(IsEmptyQ(q)) {
-        printf("Empty Queue!\n");
-        return 0;
-    }
-    QNode* qNode = q->head;
-    while( r>0 )
-    {
-        qNode = qNode->next;
-        r--;
-    }
-    return qNode->IsWhat;
-}
-
-int QueueSize(Queue* q)
-{
-    if(IsEmptyQ(q)) {
-       printf("Empty Queue!\n");
-        return 0;
-    }
-    int size=0;
-    QNode* qNode = q->head;
-    while (qNode != NULL){
-        size++;
-        qNode = qNode->next;
-    }
-    return size;
-    
+	for(int i=r ; i<tail-1; ++i) h[i]=h[i+1];
 }
 
 void MazeDfs(int x, int y) // 从（x,y) 开始生成地图
@@ -156,14 +67,14 @@ void MazeDfs(int x, int y) // 从（x,y) 开始生成地图
         if ( range <= 0 ) MazeDfs( dx, dy ); //继续以此节点递归
 
     }
-    
 }
-void GeneratingMaze_Hard() 
+
+void GeneratingMaze_Medium() //深度优先算法生成迷宫 
 {
    srand(GetTickCount());
    for(int i=1; i<=N; ++i )
         for(int j=1; j<=N; ++j)
-            mp[i][j] = 1;
+            mp[i][j] = Wall;
    for (int i=1; i<=N; ++i)
     {
         mp[i][1] = Route;
@@ -198,7 +109,7 @@ void GeneratingMaze_Hard()
 
 }
 
-void GeneratingMaze_Medium() // 规模小于 15*15！
+void GeneratingMaze_Hard() //Prim算法生成迷宫 
 {
    srand(GetTickCount());
    for(int i=1; i<=N; ++i )
@@ -211,17 +122,19 @@ void GeneratingMaze_Medium() // 规模小于 15*15！
         mp[N][i] = Route;
         mp[i][N] = Route;
     }
-
-    Queue* X = CreateQueue();
-    Queue* Y = CreateQueue();
+	
+    int hX[N*N];//Queue* X = CreateQueue();
+    int hY[N*N];//Queue* Y = CreateQueue();
+    int head,tail;head=tail=0; 
     
-    AddNode(X,3);
-    AddNode(Y,4);
-
-    while(!IsEmptyQ(X)) {
-        int r = rand() % QueueSize(X);
-        int x = GetNode(X, r);
-        int y = GetNode(Y, r);
+    hX[tail]=3;hY[tail]=3;tail++;
+    
+    while(head < tail) {
+    	
+        int r = rand() % (tail-head); 
+        
+        int x = hX[r];
+        int y = hY[r];
 
         int count = 0;
 		for (int i = x - 1; i < x + 2; i++) {	
@@ -237,15 +150,15 @@ void GeneratingMaze_Medium() // 规模小于 15*15！
             for (int i = x - 1; i < x + 2; i++) {
 				for (int j = y - 1; j < y + 2; j++) {
 					if (abs(x - i) + abs(y - j) == 1 && mp[i][j] == Wall) {
-						AddNode(X, i);
-                        AddNode(Y, j);
+						hX[tail]=i;hY[tail]=j;tail++;
 					}
                 }
             }
         }
 
-        My_DeleteNode(X, r);
-        My_DeleteNode(Y, r);
+        My_Delete(hX, r, tail);
+        My_Delete(hY, r, tail);
+        tail--;
     }
     mp[3][3] = -1;
     for( int i = N-2; i>=1; i--) {
@@ -255,11 +168,77 @@ void GeneratingMaze_Medium() // 规模小于 15*15！
         }
     }
 }
+
+void GeneratingMaze_Eazy() //递归算法生成迷宫 
+{
+	srand(GetTickCount());
+	for (int i=1; i<=N; ++i)
+    {
+        mp[i][1] = Wall;
+        mp[1][i] = Wall;
+        mp[N][i] = Wall;
+        mp[i][N] = Wall;
+    }
+    
+    Eazymaze(2, 2, N-1,N-1);
+    mp[2][0] = -1;
+    mp[N-1][N-1] = -2; 
+    debug_matrix();
+    
+}
+
+void Eazymaze(int x1, int y1, int x2, int y2){
+	if(x2-x1<2 || y2-y1<2) return;
+	int x=x1+1+rand()%(x2-x1-1);
+	int y=y1+1+rand()%(y2-y1-1);
+	
+	for(int i=x1;i<=x2;i++) mp[i][y]=Wall;
+    for(int i=y1;i<=y2;i++) mp[x][i]=Wall;
+    
+    Eazymaze(x1,y1,x-1,y-1);
+    Eazymaze(x+1, y+1, x2, y2);
+    Eazymaze(x+1,y1,x2,y-1);
+    Eazymaze(x1, y+1, x-1, y2);
+    
+    int r[4]={0};
+    for(int i=0;i<3;++i) r[rand()%4] = 1;
+    
+    for(int i=0;i<4;i++){
+    	if(r[i]==1){
+    		int rx=x,ry=y;
+    		switch(i) {
+    			case 0:{
+    				rx=x1+rand()%(x-x1);
+    				while(IsOK(rx,ry)) rx=x1+rand()%(x-x1); //printf("rx = %d, ????????:%d %d %d %d\n",rx,mp[rx][ry-1],mp[rx][ry+1],mp[rx-1][ry],mp[rx+1][ry]);}
+					break;
+				}
+				case 1:{
+					rx=x+1+rand()%(x2-x);
+    				while(IsOK(rx,ry)) rx=x+1+rand()%(x2-x);
+					break;
+				}
+				case 2:{
+					ry=y1+rand()%(y-y1);
+    				while(IsOK(rx,ry)) ry=y1+rand()%(y-y1);
+					break;
+				}
+				case 3:{
+					ry=y+1+rand()%(y2-y);
+    				while(IsOK(rx,ry)) ry=y+1+rand()%(y2-y);
+					break;
+				}
+			}
+		mp[rx][ry] = Route;
+		}
+	}
+}
+
 extern int Tough_N;
 void GeneratingMaze(int rank){
     switch(rank){
-        case 1:N=12,GeneratingMaze_Medium();break;  
-        case 2:N=22,GeneratingMaze_Hard();break; 
+        case 1:N=22,GeneratingMaze_Eazy();break;  
+        case 2:N=22,GeneratingMaze_Medium();break; 
+        case 3:N=32,GeneratingMaze_Hard();break;
         default:LoadRecord_i(Tough_Base-rank);break;
     }
     Xp=Yp=3;
