@@ -210,7 +210,7 @@ void DrawMenu_Edit()
 	MenuCSS();
 	selection = menuList(GenUIID(0),x+w,  y-h, w, wlist,h, menuListTool, sizeof(menuListTool)/sizeof(menuListTool[0]));
 	if( selection==1 ) {
-		GeneratingMaze(3);
+		GeneratingMaze(1);
 	}
 	else if ( selection==2 ) InitMaze_Edit();
 	

@@ -172,17 +172,14 @@ void GeneratingMaze_Hard() //Prim算法生成迷宫
 void GeneratingMaze_Eazy() //递归算法生成迷宫 
 {
 	srand(GetTickCount());
-	for (int i=1; i<=N; ++i)
-    {
-        mp[i][1] = Wall;
-        mp[1][i] = Wall;
-        mp[N][i] = Wall;
-        mp[i][N] = Wall;
-    }
+	for( int i=2; i<=N-1; ++i)
+		for (int j=2; j<=N-1; ++j) mp[i][j] = Wall;
+	for(int i=3; i< N-1; i++)
+		for(int j=3; j<N-1; j++) mp[i][j] = Route;
     
-    Eazymaze(2, 2, N-1,N-1);
-    mp[2][0] = -1;
-    mp[N-1][N-1] = -2; 
+    Eazymaze(3, 3, N-2,N-2);
+    //mp[2][0] = -1;
+    mp[N-2][N-2] = -2; 
     debug_matrix();
     
 }
@@ -201,10 +198,10 @@ void Eazymaze(int x1, int y1, int x2, int y2){
     Eazymaze(x1, y+1, x-1, y2);
     
     int r[4]={0};
-    for(int i=0;i<3;++i) r[rand()%4] = 1;
+    r[rand()%4]=1;
     
     for(int i=0;i<4;i++){
-    	if(r[i]==1){
+    	if(r[i]==0){
     		int rx=x,ry=y;
     		switch(i) {
     			case 0:{
