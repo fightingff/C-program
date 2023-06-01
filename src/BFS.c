@@ -65,5 +65,21 @@ void GetAll(){
     SaveGame();
     ShowPath(Hd);
 }
-
+void NextStep(){
+    Pos T=BFS(Xp,Yp);
+    if(!~T.step){
+        double W=GetWindowWidth(),H=GetWindowHeight();
+        SetPointSize(50),SetPenColor("Red");
+        drawBox(W-H+2,H/2,4,2,1,"Error!",'C',"Yellow");
+        Pause(1.0);
+        DisplayClear();
+        ReDraw();
+        return;
+    }
+    Step=T.step;
+    Tp p=NULL;
+    while(Pre[T.x][T.y].step) T=Pre[T.x][T.y];
+    Xp=T.x,Yp=T.y;
+    ReDraw();
+}
 #endif
