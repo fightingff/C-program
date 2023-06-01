@@ -178,12 +178,16 @@ void GeneratingMaze_Eazy() //µ›πÈÀ„∑®…˙≥…√‘π¨
         mp[1][i] = Wall;
         mp[N][i] = Wall;
         mp[i][N] = Wall;
+        mp[i][2] = Wall;
+        mp[2][i] = Wall;
+        mp[N-1][i] = Wall;
+        mp[i][N-1] = Wall;
     }
     
-    Eazymaze(2, 2, N-1,N-1);
-    mp[2][0] = -1;
-    mp[N-1][N-1] = -2; 
-    debug_matrix();
+    Eazymaze(3, 3, N-2,N-2);
+    mp[3][3] = -1;
+    mp[N-2][N-2] = -2; 
+    // debug_matrix();
     
 }
 
@@ -236,7 +240,7 @@ void Eazymaze(int x1, int y1, int x2, int y2){
 extern int Tough_N;
 void GeneratingMaze(int rank){
     switch(rank){
-        case 1:N=22,GeneratingMaze_Eazy();break;  
+        case 1:N=12,GeneratingMaze_Hard();break;  
         case 2:N=22,GeneratingMaze_Medium();break; 
         case 3:N=32,GeneratingMaze_Hard();break;
         default:LoadRecord_i(Tough_Base-rank);break;

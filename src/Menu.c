@@ -164,7 +164,9 @@ void GetHint(){//获取提示
 	SetPointSize(30);
 	setButtonColors("White","Green","Yellow","Yellow",1);
 	if(button(GenUIID(999),0.95,5.0,3.0,0.9,"提   示")) Get_Fastest();
+	setButtonColors("White","Green","Yellow","Yellow",1);
 	if(button(GenUIID(998),0.95,1.5,3.0,0.9,"求 解 过 程")) GetAll();
+	setButtonColors("White","Green","Yellow","Yellow",1);
 	if(button(GenUIID(998),0.95,2.5,3.0,0.9,"下 一 步")) NextStep();
 }
 void BestPlay(){//最佳表现
