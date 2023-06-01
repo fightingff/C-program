@@ -12,7 +12,7 @@ extern int mp[maxn][maxn];
 extern int Xp,Yp;
 
 void PaintUnits(double X, double Y,double len)
-{
+{//地图绘制
     double ul = len/N;
     for (int i=2; i<=N-1;++i) // omit the wrapper
     {
@@ -44,7 +44,7 @@ void PaintUnits(double X, double Y,double len)
 }
 
 void DrawMaze()
-{
+{//地图绘制
     //(st, st)为迷宫左上角，len为迷宫边长，两者可以改为外部传入
     double W=GetWindowWidth(),H=GetWindowHeight(),len = H*0.9;
     SetPenColor("Gray");
@@ -52,7 +52,7 @@ void DrawMaze()
 	PaintUnits(W-H,H-2, len);
 }
 
-void ShowPath(Pos *p){
+void ShowPath(Pos *p){//在地图上显示路径
 	Tp tp=p;
 	for(;p!=NULL;p=p->next){
 		mp[p->x][p->y]=-3;

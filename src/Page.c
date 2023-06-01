@@ -131,7 +131,7 @@ void Page_Info(){//操作说明
 	DrawTextString("用最短的时间到达终点！");
 	registerMouseEvent(MouseEvent_Back);
 }
-void Page_EditInfo(){
+void Page_EditInfo(){//编辑说明
 	double W=GetWindowWidth(),H=GetWindowHeight();
 	double X=W/2,Y=H/2;
 	cancelMouseEvent();
@@ -159,7 +159,7 @@ void DrawMenu_Edit();
 void DrawButton_Edit();
 void DrawMaze_Edit();
 void display()
-{
+{//编辑页面显示
 	DisplayClear();
 	DrawButton_Edit();
 	DrawMaze_Edit();
@@ -170,7 +170,7 @@ void Page_Edit(){
 	display();
 }
 void DrawMenu_Edit()
-{
+{//主菜单
 	static char * menuListFile[] = {"File",  
 		"Open    | Ctrl-R", 
 		"Save    | Ctrl-S"};
@@ -226,7 +226,7 @@ void DrawMenu_Edit()
 }
 
 void DrawButton_Edit()
-{
+{//主要按钮
 	double fH = GetFontHeight();
 	double h = fH*2;
 	double x =  W*2/3;
@@ -259,7 +259,7 @@ void DrawButton_Edit()
 	
 }
 
-void drawLines(double X, double Y ,double len)
+void drawLines(double X, double Y ,double len)//绘制网格线
 {
 	double ul = len/N; 
 	double mlen = len - 2*ul;
@@ -272,7 +272,7 @@ void drawLines(double X, double Y ,double len)
 }
 
 void DrawMaze_Edit()
-{
+{//绘制迷宫
 	SetPenSize(2);
 	SetPenColor("Gray");
 	PaintUnits(imaze.x, imaze.y - imaze.ulen, imaze.slen); 

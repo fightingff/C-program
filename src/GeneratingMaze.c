@@ -180,7 +180,6 @@ void GeneratingMaze_Eazy() //µİ¹éËã·¨Éú³ÉÃÔ¹¬
     Eazymaze(3, 3, N-2,N-2);
     //mp[2][0] = -1;
     mp[N-2][N-2] = -2; 
-    debug_matrix();
     
 }
 
