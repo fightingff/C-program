@@ -14,6 +14,7 @@ const int Dpos[4][2]={{-1,0},{0,1},{1,0},{0,-1}};
 Pos Q[maxn*maxn],Pre[maxn][maxn];
 int vis[maxn][maxn];
 int Check(int x,int y){return (x>=1&&x<=N&&y>=1&&y<=N&&mp[x][y]!=1&&!vis[x][y]);}
+//判断地图合法性
 Pos BFS(int sx,int sy){//BFS求最短路，以(sx,sy)为起点
     int Hd=0,Tl=0;memset(vis,0,sizeof(vis));
     Q[++Tl]=(Pos){sx,sy,0},vis[sx][sy]=1;
@@ -31,7 +32,7 @@ Pos BFS(int sx,int sy){//BFS求最短路，以(sx,sy)为起点
     return Q[1];
 }
 extern int Step;
-void Get_Fastest(){
+void Get_Fastest(){//最短路径输出
     Pos T=BFS(Xp,Yp);
     if(!~T.step){
         double W=GetWindowWidth(),H=GetWindowHeight();
@@ -52,7 +53,7 @@ void Get_Fastest(){
     SaveGame();
     ShowPath(p);
 }
-void GetAll(){
+void GetAll(){//获取求解过程
     BFS(Xp,Yp);
     Tp Hd=NULL,Tl=NULL;
     for(int i=1;;i++){
@@ -65,7 +66,7 @@ void GetAll(){
     SaveGame();
     ShowPath(Hd);
 }
-void NextStep(){
+void NextStep(){//获取下一步
     Pos T=BFS(Xp,Yp);
     if(!~T.step){
         double W=GetWindowWidth(),H=GetWindowHeight();

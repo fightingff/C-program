@@ -14,13 +14,13 @@ extern struct Imaze imaze;
 void MouseEvent_Edit(int x ,int y, int button ,int event);
 void Edit(){registerMouseEvent(MouseEvent_Edit);}
 int CheckArea(double x, double y)
-{
+{//判断地图合法性
 	//printf("\nmaze's x = %lf, maze's y = %lf",imaze.x, imaze.y);
 	//printf("x = %lf, y = %lf\n",x,y);
 	return ( x>=imaze.x && x<=imaze.x+imaze.mlen && y<=imaze.y && y>=imaze.y-imaze.mlen) ;
 }
 void MouseEvent_Edit(int x, int y, int button, int event)
-{
+{//鼠标点击绘制地图
 	uiGetMouse(x,y,button,event);
 	double mx=ScaleXInches(x),my=ScaleYInches(y);
 	if(CheckArea(mx, my)){
@@ -48,7 +48,7 @@ void MouseEvent_Edit(int x, int y, int button, int event)
 	}
 	Page_Edit();
 }
-void InitMaze_Edit(){
+void InitMaze_Edit(){//地图初始化
 	for(int i=1; i<= N; i++)
 		for(int j=1; j<=N; j++) mp[i][j] = 1;
 	for(int i=3; i< N-1; i++)
@@ -66,10 +66,10 @@ void SetFigures_Edit() // initial figures for Page_Edit;
 	InitMaze_Edit();
 }
 
-void debug_matrix(){
-	for(int i=2;i<=N-1;++i){
-		for(int j=2;j<=N-1;++j) printf("%d ", mp[i][j] );
-		printf("\n");
-	}		
-}
+// void debug_matrix(){
+// 	for(int i=2;i<=N-1;++i){
+// 		for(int j=2;j<=N-1;++j) printf("%d ", mp[i][j] );
+// 		printf("\n");
+// 	}		
+// }
 #endif

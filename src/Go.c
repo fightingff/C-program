@@ -16,6 +16,7 @@ int Get(int key){//获取按键
     return -1;
 }
 int OK(int x,int y){return (x>=1&&x<=N&&y>=1&&y<=N&&mp[x][y]!=1);}//地图合法性判断
+//判断合法性
 void Go_Move(int key,int event){//移动
     uiGetKeyboard(key,event);
     if(event==KEY_UP) return;

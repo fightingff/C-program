@@ -15,13 +15,12 @@ void MouseEvent_Main(int x,int y,int button,int event);
 void MouseEvent_Choose(int x,int y,int button,int event);
 void MouseEvent_Edit(int x, int y, int button,int event);
 void MouseEvent_TabBar(int x,int y,int button,int event);
-void MouseEvent_Hint(int x,int y,int button,int event);
 void Menu_Main_Show();
 void Menu_Choose_Show();
 void TabBar_Show();
 //预声明MouseEvent函数
 
-void MenuCSS(){
+void MenuCSS(){//菜单样式
 	setMenuColors("White","Orange","Blue","Green",0);
 	SetPointSize(20);
 	SetPenSize(2);

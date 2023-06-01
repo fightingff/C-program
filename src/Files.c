@@ -12,7 +12,7 @@ static int Records_N=0;
 static Rp Head=NULL,Tail=NULL;
 extern int Xp,Yp;
 extern int Tough_N;
-void InitGames(){
+void InitGames(){//‘ÿ»Î”Œœ∑πÿø®
     char filename[20]="";
     Tough_N=3;
     for(int i=-1;;i--,Tough_N++){
