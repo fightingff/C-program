@@ -73,14 +73,14 @@ void MouseEvent_Choose(int x,int y,int button,int event){
 	uiGetMouse(x,y,button,event);
 	Menu_Choose_Show();
 }
-#define Tough_N 3
 int tp_flag=0;
+#define Min(x,y) ((x)<(y)?(x):(y))
 void Draw_Label(int Tough_Choose){//绘制关卡切换动画
-	static char *Tough[]={0,"简 单","中 等","困 难"};
+	static char *Tough[]={0,"简 单","中 等","自定义"};
 	static char s[128]="";
 	double W=GetWindowWidth(),H=GetWindowHeight();
 	double X=W/2-4,Y=H/2+1;
-	sprintf(s,"选择关卡：【%d】%s",Tough_Choose,Tough[Tough_Choose]);
+	sprintf(s,"选择关卡：【%d】%s",Tough_Choose,Tough[Min(Tough_Choose,3)]);
 	//完成一段切换的动画
 	if(tp_flag){
 		DisplayClear();
@@ -111,6 +111,7 @@ void Draw_Label(int Tough_Choose){//绘制关卡切换动画
 		tp_first=0;
 	}
 }
+extern int Tough_N;
 void Menu_Choose_Show(){//显示选择关卡
 	double W=GetWindowWidth(),H=GetWindowHeight();
 	double X=W/2-4,Y=H/2+1;
@@ -164,6 +165,7 @@ void GetHint(){//获取提示
 	SetPointSize(30);
 	setButtonColors("White","Green","Yellow","Yellow",1);
 	if(button(GenUIID(999),0.95,5.0,3.0,0.9,"提   示")) Get_Fastest();
+	if(button(GenUIID(998),0.95,2.0,3.0,0.9,"求 解 过 程")) GetAll();
 }
 void BestPlay(){//最佳表现
 	SetPointSize(30);
@@ -199,28 +201,28 @@ void TabBar_Show(){//选项卡
 		"Game",
 		"New Game",
 		"Save Game",
-		"Menu",
-		"Exit"
+		"Menu"
 	};
 	static char *MenuListHelp[]={
 		"Help",
 		"Options",
-		"About"
+		"About",
+		"Exit"
 	};
 	double W=GetWindowWidth(),H=GetWindowHeight();
 	MenuCSS();
-	int opt1=menuList(GenUIID(101),W-H-0.5,H-0.5,1,1.5,0.5,MenuListGame,5);
+	int opt1=menuList(GenUIID(101),W-H-0.5,H-0.5,1,1.5,0.5,MenuListGame,4);
 	switch(opt1){
 		case 1:cancelTimerEvent(),cancelMouseEvent();Menu_Choose();break;//新游戏
 		case 2:cancelTimerEvent(),cancelMouseEvent();SaveGame();break;   //保存当前游戏状态
 		case 3:cancelTimerEvent(),cancelMouseEvent();Menu_Main();break;  //返回主菜单
-		case 4:Page_Exit();break;										//退出游戏
 	}
 	MenuCSS();
-	int opt2=menuList(GenUIID(102),W-H+1,H-0.5,1,1.2,0.5,MenuListHelp,3);
+	int opt2=menuList(GenUIID(102),W-H+1,H-0.5,1,1.2,0.5,MenuListHelp,4);
 	switch(opt2){
 		case 1:cancelTimerEvent();cancelMouseEvent();Page_Info();break;//操作信息
 		case 2:cancelTimerEvent();cancelMouseEvent();Page_About();break;//关于
+		case 3:Page_Exit();break;										//退出游戏
 	}
 	printf("%d %d\n",opt1,opt2);
 	if(!opt1||!opt2) DisplayClear(),SideBar(),DrawMaze();

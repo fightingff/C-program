@@ -52,10 +52,6 @@ void DrawMaze()
 	PaintUnits(W-H,H-2, len);
 }
 
-void MouseEditMaze(){
-
-}
-
 void ShowPath(Pos *p){
 	Tp tp=p;
 	for(;p!=NULL;p=p->next){

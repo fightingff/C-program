@@ -7,6 +7,7 @@
 #include"Game.h"
 void Main(){
 	InitConsole();
+	InitGames();
 	InitGUI();
 	SetWindowSize(10.0/0.618,10.0); 
 	InitGraphics();

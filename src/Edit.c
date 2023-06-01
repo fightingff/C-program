@@ -34,6 +34,8 @@ void MouseEvent_Edit(int x, int y, int button, int event)
 				if (button == LEFT_BUTTON && event == BUTTON_DOWN) mp[2+dy][2+dx] = 1;	break;
 			case 3:
 				if (button == LEFT_BUTTON && event == BUTTON_DOWN) {// 4)let -3 be entry temperaril ,to be changed
+					for(int i=2;i<N;i++)
+						for(int j=2;j<N;j++) if(mp[i][j]==-3) mp[i][j]=0;
 					mp[2+dy][2+dx] = -3;	
 					break; 
 			}
@@ -48,7 +50,9 @@ void MouseEvent_Edit(int x, int y, int button, int event)
 }
 void InitMaze_Edit(){
 	for(int i=1; i<= N; i++)
-		for(int j=1; j<=N; j++) mp[i][j] = 0;
+		for(int j=1; j<=N; j++) mp[i][j] = 1;
+	for(int i=3; i< N-1; i++)
+		for(int j=3; j<N-1; j++) mp[i][j] = 0;
 }
 void SetFigures_Edit() // initial figures for Page_Edit;
 {

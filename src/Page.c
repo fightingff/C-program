@@ -21,6 +21,17 @@ void MouseEvent_Back(int x,int y,int btn,int event){//鼠标点击返回事件
 		ReDraw();
 	}
 }
+void MouseEvent_BackEdit(int x,int y,int btn,int event){
+	uiGetMouse(x,y,btn,event);
+	double W=GetWindowWidth(),H=GetWindowHeight();
+	double X=W/2,Y=H/2;
+	SetPointSize(30);
+	if(button(GenUIID(555),W-2.1,2,1.5,0.8,"返回")){
+		cancelMouseEvent();
+		DisplayClear();
+		Edit();
+	}
+}
 void Page_About(){//退出的文字
 	double W=GetWindowWidth(),H=GetWindowHeight();
 	double X=W/2,Y=H/2;
@@ -120,7 +131,29 @@ void Page_Info(){//操作说明
 	DrawTextString("用最短的时间到达终点！");
 	registerMouseEvent(MouseEvent_Back);
 }
-
+void Page_EditInfo(){
+	double W=GetWindowWidth(),H=GetWindowHeight();
+	double X=W/2,Y=H/2;
+	cancelMouseEvent();
+	DisplayClear();
+	SetPenSize(5);
+	SetPenColor("Green");
+	drawRectangle(X-4,Y-3.5,9.0,6.0,0);
+	SetPenColor("Orange");
+	SetPointSize(30);
+	Y+=1.5;
+	MovePen(X-3.2,Y);
+	DrawTextString("选择相应按钮后，直接点击网格编辑");
+	MovePen(X-3.2,Y-=1);
+	DrawTextString("【Open】打开最近编辑的地图文件");
+	MovePen(X-3.2,Y-=1);
+	DrawTextString("【Save】保存当前编辑的地图文件");
+	MovePen(X-3.2,Y-=1);
+	DrawTextString("【QuickMade】 快速生成地图");
+	MovePen(X-3.2,Y-=1);
+	DrawTextString("【Redraw】重新绘制地图");
+	registerMouseEvent(MouseEvent_BackEdit);
+}
 
 void DrawMenu_Edit();
 void DrawButton_Edit();
@@ -128,9 +161,9 @@ void DrawMaze_Edit();
 void display()
 {
 	DisplayClear();
-	DrawMenu_Edit();
 	DrawButton_Edit();
 	DrawMaze_Edit();
+	DrawMenu_Edit();
 }
 void Page_Edit(){
 	W=GetWindowWidth(),H=GetWindowHeight();
@@ -142,8 +175,8 @@ void DrawMenu_Edit()
 		"Open    | Ctrl-R", 
 		"Save    | Ctrl-S"};
 	static char * menuListTool[] = {"Tool",
-		"速成模板  | Ctrl-P",
-		"重新绘制  | Ctrl-R"};
+		"QuickMade | Ctrl-P",
+		"Redraw    | Ctrl-R"};
 	static char * menuListHelp[] = {"Help",
 		"About",
 		"Menu",
@@ -160,8 +193,18 @@ void DrawMenu_Edit()
 	// File 
 	MenuCSS();
 	selection = menuList(GenUIID(0), x, y-h, w, wlist, h, menuListFile, sizeof(menuListFile)/sizeof(menuListFile[0]));
-	if( selection==2 ) SaveGame(); // 2) Problem : will flash into Menu_choose
-	else if( selection==1 ) LoadGame();
+	if( selection==2 ){
+		Modify(2-++Tough_N);
+		double W=GetWindowWidth(),H=GetWindowHeight();
+		SetPointSize(50),SetPenColor("Red");
+		drawBox(W-H+2,H/2,4,2,1,"保存成功",'C',"Yellow");
+		Pause(1.0);
+		Menu_Main();
+	}
+	else if( selection==1 ){
+		if(Tough_N<3) return;
+		LoadRecord_i(2-Tough_N); 
+	}
 	
 	// Tool 
 	MenuCSS();
@@ -174,11 +217,9 @@ void DrawMenu_Edit()
 	// Help ???
 	MenuCSS();
 	selection = menuList(GenUIID(0),x+2*w,y-h, w, wlist, h, menuListHelp,sizeof(menuListHelp)/sizeof(menuListHelp[0]));
-	if( selection==3 ) Page_Exit(); //  5) to be improved : back to the previous page
+	if( selection==3 ) Page_Exit(); 
 	else if ( selection==1 ){
-		Page_About();
-		
-		// 4) information can be added
+		Page_EditInfo();
 	}else if ( selection==2 ){
 		Menu_Main();
 	}

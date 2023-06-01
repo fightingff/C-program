@@ -52,5 +52,18 @@ void Get_Fastest(){
     SaveGame();
     ShowPath(p);
 }
+void GetAll(){
+    BFS(Xp,Yp);
+    Tp Hd=NULL,Tl=NULL;
+    for(int i=1;;i++){
+        Tp q=(Tp)malloc(sizeof(Pos));
+        q->x=Q[i].x,q->y=Q[i].y,q->step=Q[i].step;
+        if(Hd==NULL) Hd=q;else Tl->next=q;
+        Tl=q; 
+        if(mp[q->x][q->y]==-2) break;
+    }
+    SaveGame();
+    ShowPath(Hd);
+}
 
 #endif

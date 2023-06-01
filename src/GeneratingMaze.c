@@ -255,13 +255,16 @@ void GeneratingMaze_Medium() // 规模小于 15*15！
         }
     }
 }
-
+extern int Tough_N;
 void GeneratingMaze(int rank){
-    Xp=Yp=3;
     switch(rank){
         case 1:N=12,GeneratingMaze_Medium();break;  
         case 2:N=22,GeneratingMaze_Hard();break; 
+        default:LoadRecord_i(2-rank);break;
     }
+    Xp=Yp=3;
+    for(int i=2;i<=N;i++)
+       for(int j=2;j<=N;j++) if(mp[i][j]==-1||mp[i][j]==-3) {Xp=i,Yp=j;return (void)(DrawMaze());}
     DrawMaze();
 }
 
