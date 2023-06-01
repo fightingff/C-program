@@ -12,7 +12,10 @@ extern int edit_mode;
 extern struct Imaze imaze;
 
 void MouseEvent_Edit(int x ,int y, int button ,int event);
-void Edit(){registerMouseEvent(MouseEvent_Edit);}
+void CharEvent_Edit(char ch);
+void KeyboardEvent_Edit(int key, int event);
+
+void Edit(){registerMouseEvent(MouseEvent_Edit);registerCharEvent(CharEvent_Edit);registerKeyboardEvent(KeyboardEvent_Edit);}
 int CheckArea(double x, double y)
 {//判断地图合法性
 	//printf("\nmaze's x = %lf, maze's y = %lf",imaze.x, imaze.y);
@@ -47,6 +50,16 @@ void MouseEvent_Edit(int x, int y, int button, int event)
 		}
 	}
 	Page_Edit();
+}
+void CharEvent_Edit(char ch)
+{
+	uiGetChar(ch);
+	Page_Edit();
+}
+void KeyboardEvent_Edit(int key, int event)
+{
+	uiGetKeyboard(key,event); 
+	Page_Edit(); 
 }
 void InitMaze_Edit(){//地图初始化
 	for(int i=1; i<= N; i++)

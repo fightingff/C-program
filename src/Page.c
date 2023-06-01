@@ -158,14 +158,17 @@ void Page_EditInfo(){//编辑说明
 void DrawMenu_Edit();
 void DrawButton_Edit();
 void DrawMaze_Edit();
+
 void display()
 {//编辑页面显示
 	DisplayClear();
 	DrawButton_Edit();
+	DrawEditText_Edit();
 	DrawMaze_Edit();
 	DrawMenu_Edit();
 }
-void Page_Edit(){
+
+void Page_Edit(){   
 	W=GetWindowWidth(),H=GetWindowHeight();
 	display();
 }
@@ -256,7 +259,35 @@ void DrawButton_Edit()
 		if( edit_mode == 5 ) edit_mode = 0;
 		else edit_mode = 5;
 	}
+}
+
+void DrawEditText_Edit()
+{//交互文本框 
+	static char memo[80]="Maze Size:";
+	static char size[10]="22";
+	static char tips[80] = "";
+	double fH = GetFontHeight();
+	double h = fH*2;
+	double x =  W*2/3;
+	double y = H - h*14;
+	double w = TextStringWidth("四个汉字")*2; 
 	
+	SetPenColor("Brown");
+	drawLabel(x-TextStringWidth(memo), y+fH*0.6,memo);
+	if(textbox(GenUIID(0), x,y, w,h,size, sizeof(size))){  // for debug : remember to cancel char and keyboard event in other page!
+		int number = 0;
+		for(int i=0;size[i]!='\0';++i)
+		{	
+			if(size[i]>'9' || size[i]<'0') {sprintf(tips,"[ERROR] Please enter digits!");return;}
+			else if( i > 1) {sprintf(tips,"Too Large!",size);return;}
+		}
+		for(int i=0;size[i]!='\0';++i) number = (size[i]-'0')*10 + number;
+		if(number<=12) sprintf(tips,"Too Small, Boring!");
+		else sprintf(tips,"Press [ENTER] to confirm the change! %s", size);
+	}
+	
+	SetPenColor("Gray");
+	drawLabel(x, y-fH,tips);
 }
 
 void drawLines(double X, double Y ,double len)//绘制网格线
