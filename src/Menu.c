@@ -76,11 +76,11 @@ void MouseEvent_Choose(int x,int y,int button,int event){
 int tp_flag=0;
 #define Min(x,y) ((x)<(y)?(x):(y))
 void Draw_Label(int Tough_Choose){//绘制关卡切换动画
-	static char *Tough[]={0,"简 单","中 等","自定义"};
+	static char *Tough[]={0,"简 单","中 等","困 难","自定义"};
 	static char s[128]="";
 	double W=GetWindowWidth(),H=GetWindowHeight();
 	double X=W/2-4,Y=H/2+1;
-	sprintf(s,"选择关卡：【%d】%s",Tough_Choose,Tough[Min(Tough_Choose,3)]);
+	sprintf(s,"选择关卡：【%d】%s",Tough_Choose,Tough[Min(Tough_Choose,Tough_Base+1)]);
 	//完成一段切换的动画
 	if(tp_flag){
 		DisplayClear();

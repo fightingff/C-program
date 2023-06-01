@@ -14,7 +14,7 @@ extern int Xp,Yp;
 extern int Tough_N;
 void InitGames(){
     char filename[20]="";
-    Tough_N=2;
+    Tough_N=3;
     for(int i=-1;;i--,Tough_N++){
         sprintf(filename,"Game%d.txt",i);
         if(fopen(filename,"r")==NULL) break;

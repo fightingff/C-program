@@ -260,7 +260,7 @@ void GeneratingMaze(int rank){
     switch(rank){
         case 1:N=12,GeneratingMaze_Medium();break;  
         case 2:N=22,GeneratingMaze_Hard();break; 
-        default:LoadRecord_i(2-rank);break;
+        default:LoadRecord_i(Tough_Base-rank);break;
     }
     Xp=Yp=3;
     for(int i=2;i<=N;i++)

@@ -2,6 +2,7 @@
 #define GAME_H
 
 #define maxn 2005
+#define Tough_Base 3
 int Tough_N;//难度
 int N; //地图大小
 int Xp,Yp;//当前位置

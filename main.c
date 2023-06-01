@@ -9,6 +9,7 @@ void Main(){
 	InitConsole();
 	InitGames();
 	InitGUI();
+	SetWindowTitle("√‘ π¨ ”Œ œ∑");
 	SetWindowSize(10.0/0.618,10.0); 
 	InitGraphics();
 	Menu_Main();
