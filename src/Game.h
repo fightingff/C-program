@@ -28,6 +28,7 @@ Pos *Head_List,*Tail_List;//记录玩家操作
 void Menu_Main();//主菜单
 void Get_Fastest();//求最短路
 void GetAll();//求所有路径
+void NextStep();//提示下一步
 
 void MenuCSS();//菜单样式
 void Clock();//计时器
