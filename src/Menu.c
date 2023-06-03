@@ -34,14 +34,13 @@ void MouseEvent_Main(int x,int y,int button,int event){
 void Menu_Main_Show(){//显示主菜单
 	DisplayClear();
 	double W=GetWindowWidth(),H=GetWindowHeight();
-	double X=W/2-1,Y=H/2+1;
+	double X=W/2-1,Y=H/2+1,dy=1.5;
 	SetPenSize(10);
 	SetPenColor("Yellow");
-	drawRectangle(X-1,Y-4,4,7,0);
+	drawRectangle(X-1,Y-3*dy,4,7,0);
 	SetFont("楷体");
 	SetPointSize(30);
 	SetPenSize(3);
-	double dy=1.5;
 	Y+=1,X-=0.5;
 	setButtonColors("White","Green","White","Blue",1);
 	//主操作选择
@@ -58,14 +57,21 @@ void Menu_Main_Show(){//显示主菜单
 		return;
 	}
 	setButtonColors("White","Green","White","Blue",1);
-	if(button(GenUIID(1),X,Y-=dy,3.0,1.0,"绘制地图")) {
+	if(button(GenUIID(2),X,Y-=dy,3.0,1.0,"绘制地图")) {
 		cancelMouseEvent();
 		SetFigures_Edit();
 		Edit();
 		return;
-	}
+	} 
 	setButtonColors("White","Red","White","Blue",1);
+	if(button(GenUIID(3),X,Y-=dy,3.0,1.0,"挑战模式")) {
+		cancelMouseEvent();
+		Page_Extra();
+		return;
+	}
+	setButtonColors("White","Blue","White","Red",1);
 	if(button(GenUIID(1),X+0.5,Y-=dy,2.0,1.0,"退出")) Page_Exit(); 
+	
 }
 
 void MouseEvent_Choose(int x,int y,int button,int event){
@@ -112,7 +118,7 @@ void Draw_Label(int Tough_Choose){//绘制关卡切换动画
 }
 extern int Tough_N;
 void Menu_Choose_Show(){//显示选择关卡
-	double W=GetWindowWidth(),H=GetWindowHeight();
+	double W=GetWindowWidth(),H=GetWindowHeight();inPage=1;
 	double X=W/2-4,Y=H/2+1;
 	static int Tough_Choose=1;
 	if(tp_first) Draw_Label(Tough_Choose);//加入tp_first判断，防止闪烁
@@ -132,7 +138,7 @@ void Menu_Choose_Show(){//显示选择关卡
 		TabBar();
 		GeneratingMaze(Rank=Tough_Choose);
 		Head_List=Tail_List=NULL,Total=0,Go();
-	}
+	}inPage=0;
 }
 
 extern int Time;
@@ -164,8 +170,10 @@ void GetHint(){//获取提示
 	SetPointSize(30);
 	setButtonColors("White","Green","Yellow","Yellow",1);
 	if(button(GenUIID(999),0.95,5.0,3.0,0.9,"提   示")) Get_Fastest();
+	SetPointSize(30);
 	setButtonColors("White","Green","Yellow","Yellow",1);
 	if(button(GenUIID(998),0.95,1.5,3.0,0.9,"求 解 过 程")) GetAll();
+	SetPointSize(30);
 	setButtonColors("White","Green","Yellow","Yellow",1);
 	if(button(GenUIID(998),0.95,2.5,3.0,0.9,"下 一 步")) NextStep();
 }
@@ -231,7 +239,8 @@ void TabBar_Show(){//选项卡
 }
 void ReDraw(){//全图重绘
 	DisplayClear();
-	SideBar();TabBar();DrawMaze();
+	if(inPage==5) {SideBar();eTabBar();DrawMaze();}
+	else {SideBar();TabBar();DrawMaze();}
 	if(clock()-lst>=1000) lst=clock(),Clock();
 	SetPointSize(50),SetPenColor("Red"),drawLabel(0.95,GetWindowHeight()-2,Time_s);
 }

@@ -12,9 +12,11 @@ static int Records_N=0;
 static Rp Head=NULL,Tail=NULL;
 extern int Xp,Yp;
 extern int Tough_N;
+extern int number,inPage;
 void InitGames(){//‘ÿ»Î”Œœ∑πÿø®
     char filename[20]="";
     Tough_N=3;
+    number=22,inPage=0;
     for(int i=-1;;i--,Tough_N++){
         sprintf(filename,"Game%d.txt",i);
         if(fopen(filename,"r")==NULL) break;

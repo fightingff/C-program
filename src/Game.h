@@ -1,19 +1,21 @@
 #ifndef GAME_H
 #define GAME_H
 
-#define maxn 2005
+#define maxn 105
 #define Tough_Base 3
 int Tough_N;//难度
 int N; //地图大小
+int number; //用户设置的地图大小,初始值为22 
+int inPage;//重要页面标识，判断用户所处界面 
 int Xp,Yp;//当前位置
 int mp[maxn][maxn];
-//存储地图 0表示空 1表示障碍，-1表示起点，-2表示终点
+//存储地图 0表示空 1表示障碍，-1表示起点，-2表示终点,3表示门，4表示钥匙
 int Time; //游戏时间
 int Rank; //游戏难度
 int edit_mode; //修改模式 
-
+int Yaoshi; //拾起的钥匙数 
 typedef struct Point{
-    int x,y,step;
+    int k,x,y,step;
     struct Point *next;
 }Pos;
 struct Imaze{
@@ -37,6 +39,8 @@ void SideBar();//侧边栏
 void ReDraw();//全图重绘
 void SetFigures_Edit();//设置Edit初始参数 
 void InitMaze_Edit();//设置空白迷宫 
+void BestPlay();//最佳游戏
+
 
 void Page_About();//关于页面
 void Page_Exit(); //退出页面
@@ -69,6 +73,8 @@ void Modify(int id);//修改第id个最佳记录
 void Go();//移动
 void Edit();//手动修改 
 
+void eTabBar();//挑战模式下的上方标签栏
+void Page_Extra();//挑战模式下的额外页面
 typedef Record *Rp;
 typedef Pos *Tp;
 #endif

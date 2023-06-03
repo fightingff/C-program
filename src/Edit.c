@@ -10,6 +10,7 @@ extern int mp[maxn][maxn];
 extern int N;
 extern int edit_mode;
 extern struct Imaze imaze;
+extern int number;
 
 void MouseEvent_Edit(int x ,int y, int button ,int event);
 void CharEvent_Edit(char ch);
@@ -62,6 +63,7 @@ void KeyboardEvent_Edit(int key, int event)
 	Page_Edit(); 
 }
 void InitMaze_Edit(){//地图初始化
+	Xp=Yp=0;
 	for(int i=1; i<= N; i++)
 		for(int j=1; j<=N; j++) mp[i][j] = 1;
 	for(int i=3; i< N-1; i++)
@@ -69,7 +71,7 @@ void InitMaze_Edit(){//地图初始化
 }
 void SetFigures_Edit() // initial figures for Page_Edit;
 {
-	N = 22;
+	N = number;
 	SetPointSize(18);
 	double W=GetWindowWidth(),H=GetWindowHeight();
 	double fH = GetFontHeight();

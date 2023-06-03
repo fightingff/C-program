@@ -15,7 +15,7 @@ extern int N;
 extern int mp[maxn][maxn];
 extern int Rank;
 //控制复杂度，rank数值越大复杂度越低，>=0
-//存储地图 0表示路 1表示墙 3表示陷阱 -1表示起点，-2表示终点
+//存储地图 0表示路 1表示墙 3表示奖励 4表示陷阱 -1表示起点，-2表示终点
 typedef enum{
     Route,Wall,Trap     
 }signs;
@@ -85,25 +85,12 @@ void GeneratingMaze_Medium() //深度优先算法生成迷宫
     MazeDfs(3,3); //  起点定为(1,1)会产生环，出错
     while(1)      //  随机出口
     {
-        int i = rand()%(N/2), j = rand()%(N/2);
+        int i = rand()%(N/3), j = rand()%(N/3);
         if( i>1 && j>1 && mp[N-i][N-j] == Route )
         {
             mp[N-i][N-j] = -2;
             break;
         }
-    }
-    for ( int k=pow(N/6,2); k>0; k--) //临时想法，添加随机多个陷阱
-    {
-        while (1)
-        {
-           int i = rand()%(N-2), j = rand()%(N-2);
-            if (i>1&&j>1&&mp[N-i][N-j]==Route) 
-		    {
-			    mp[N-i][N-j]=3;
-			    break;
-		    }
-
-        }  
     }
     mp[3][3] = -1;
 
@@ -167,21 +154,43 @@ void GeneratingMaze_Hard() //Prim算法生成迷宫
             break;
         }
     }
+    for ( int k=(inPage == 5 ? pow(N/10,2):8); k>0; k--) //添加随机多个奖励/钥匙 
+    {
+        while (1)
+        {
+           int i = rand()%(N-2), j = rand()%(N-2);
+            if (i>1&&j>1&&mp[N-i][N-j]==Route) 
+		    {
+			    mp[N-i][N-j]=4;
+			    break;
+		    }
+
+        }  
+    }
+    for ( int k=(inPage == 5 ? pow(N/10,2):4); k>0; k--) //添加随机多个陷阱 /门 
+    {
+        while (1)
+        {
+           int i = rand()%(N-2), j = rand()%(N-2);
+           if( inPage != 5 ){
+           		if (i>1&&j>1&&i<N-2&&j<N-2&&mp[N-i][N-j]==Wall) 
+		    	{
+			   		mp[N-i][N-j]=3;
+			    	break;
+		    	}
+		   }
+		   else{
+            	if (i>1 && j>1 && i<N-5 && j<N-5 && mp[N-i][N-j]!=4  )
+		    	{
+		    		if((mp[N-i-1][N-j]+mp[N-i+1][N-j]==2 || mp[N-i][N-j+1] + mp[N-i][N-j-1]==2)\
+							&& mp[N-i-1][N-j]+mp[N-i+1][N-j]+mp[N-i][N-j+1] + mp[N-i][N-j-1] <3) 
+					{mp[N-i][N-j]=3;break;}
+        		}
+		    }
+		}
+    }  
 }
 
-void GeneratingMaze_Eazy() //递归算法生成迷宫 
-{
-	srand(GetTickCount());
-	for( int i=2; i<=N-1; ++i)
-		for (int j=2; j<=N-1; ++j) mp[i][j] = Wall;
-	for(int i=3; i< N-1; i++)
-		for(int j=3; j<N-1; j++) mp[i][j] = Route;
-    
-    Eazymaze(3, 3, N-2,N-2);
-    //mp[2][0] = -1;
-    mp[N-2][N-2] = -2; 
-    
-}
 
 void Eazymaze(int x1, int y1, int x2, int y2){
 	if(x2-x1<2 || y2-y1<2) return;
@@ -228,15 +237,29 @@ void Eazymaze(int x1, int y1, int x2, int y2){
 		}
 	}
 }
-
+void GeneratingMaze_Eazy() //递归算法生成迷宫 
+{
+	srand(GetTickCount());
+	for( int i=2; i<=N-1; ++i)
+		for (int j=2; j<=N-1; ++j) mp[i][j] = Wall;
+	for(int i=3; i< N-1; i++)
+		for(int j=3; j<N-1; j++) mp[i][j] = Route;
+    
+    Eazymaze(3, 3, N-2,N-2);
+    //mp[2][0] = -1;
+    mp[N-2][N-2] = -2; 
+    
+}
 extern int Tough_N;
 void GeneratingMaze(int rank){
-    switch(rank){
-        case 1:N=22,GeneratingMaze_Eazy();break;  
-        case 2:N=22,GeneratingMaze_Medium();break; 
-        case 3:N=32,GeneratingMaze_Hard();break;
-        default:LoadRecord_i(Tough_Base-rank);break;
-    }
+	if(inPage==2) GeneratingMaze_Eazy();
+	else if(inPage==5) {N=42;GeneratingMaze_Hard();}
+	else switch(rank){
+        	case 1:N=32;GeneratingMaze_Eazy();break;  
+        	case 2:N=32;GeneratingMaze_Medium();break; 
+        	case 3:N=32;GeneratingMaze_Hard();break;
+        	default:LoadRecord_i(Tough_Base-rank);break;
+    	}
     Xp=Yp=3;
     for(int i=2;i<=N;i++)
        for(int j=2;j<=N;j++) if(mp[i][j]==-1||mp[i][j]==-3) {Xp=i,Yp=j;return (void)(DrawMaze());}

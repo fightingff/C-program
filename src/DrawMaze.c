@@ -26,8 +26,9 @@ void PaintUnits(double X, double Y,double len)
 					case 1:break;
 					case -1:SetPenColor("White");break;
 					case -2:SetPenColor("Blue");break;
-					case -3:SetPenColor("Yellow");break;
+					case -3:SetPenColor("Yellow");break; 
 					case 3: SetPenColor("Red");break;
+					case 4: SetPenColor("Orange");break;
 				}
                 if(i==Xp&&j==Yp) SetPenColor("Green");
 					StartFilledRegion(1);
@@ -49,7 +50,7 @@ void DrawMaze()
     double W=GetWindowWidth(),H=GetWindowHeight(),len = H*0.9;
     SetPenColor("Gray");
     SetPenSize(2);
-	PaintUnits(W-H,H-2, len);
+	PaintUnits(W-H,H-1.5, len);
 }
 
 void ShowPath(Pos *p){//在地图上显示路径

@@ -7,8 +7,10 @@
 #include"imgui.h"
 #include"extgraph.h"
 
-static double W,H; //window width & height
+static double W,H;
 extern struct Imaze imaze;
+extern int number;
+extern int inPage; 
 static int Colors_N=6;
 static char *Colors[]={"Red","Orange","Yellow","Green","Blue","Violet","Magenta","Cyan"};
 void MouseEvent_Back(int x,int y,int btn,int event){//鼠标点击返回事件
@@ -34,7 +36,7 @@ void MouseEvent_BackEdit(int x,int y,int btn,int event){
 }
 void Page_About(){//退出的文字
 	double W=GetWindowWidth(),H=GetWindowHeight();
-	double X=W/2,Y=H/2;
+	double X=W/2,Y=H/2;inPage=3;
 	DisplayClear();
 	SetPenSize(5);
 	SetPenColor("Green");
@@ -45,7 +47,7 @@ void Page_About(){//退出的文字
 	DrawTextString("Thank you!");
 	MovePen(X-1.2,Y+0.5);
 	DrawTextString("Author: FMH & WZJ");
-	registerMouseEvent(MouseEvent_Back);
+	registerMouseEvent(MouseEvent_Back);inPage=0;
 }
 void Page_Exit(){//退出界面
 	DisplayClear();
@@ -121,14 +123,27 @@ void Page_Info(){//操作说明
 	double X=W/2,Y=H/2;
 	DisplayClear();
 	SetPenSize(5);
-	SetPenColor("Green");
-	drawRectangle(X-4,Y-0.5,10.0,3.0,0);
-	SetPenColor("Orange");
+	SetPenColor("Blue");
+	drawRectangle(X-4,Y-3.5,9.0,6.0,0);
+	SetPenColor("Black");
 	SetPointSize(30);
 	MovePen(X-3.2,Y+1.5);
 	DrawTextString("方向键 / [W][A][S][D]   控制移动");
 	MovePen(X-3.2,Y+0.5);
 	DrawTextString("用最短的时间到达终点！");
+	MovePen(X-3.2,Y-0.5);
+	DrawTextString("若出现");SetPenColor("Orange");
+	MovePen(X-3.2+TextStringWidth("若出现"),Y-0.5);
+	DrawTextString("橙色方块");
+	MovePen(X-3.2+TextStringWidth("若出现橙色方块"),Y-0.5);SetPenColor("Black");
+	DrawTextString(",拾起它可减少计时器3秒!");
+	MovePen(X-3.2,Y-=1.5);
+	DrawTextString("若出现");SetPenColor("Red");
+	MovePen(X-3.2+TextStringWidth("若出现"),Y);
+	DrawTextString("红色方块");
+	MovePen(X-3.2+TextStringWidth("若出现红色方块"),Y);SetPenColor("Black");
+	DrawTextString(",通过它可能会使你更快达到");
+	MovePen(X-3.2,Y-=1) ;DrawTextString("但会增加计时器8秒！");
 	registerMouseEvent(MouseEvent_Back);
 }
 void Page_EditInfo(){//编辑说明
@@ -158,6 +173,7 @@ void Page_EditInfo(){//编辑说明
 void DrawMenu_Edit();
 void DrawButton_Edit();
 void DrawMaze_Edit();
+void DrawEditText_Edit();
 
 void display()
 {//编辑页面显示
@@ -169,8 +185,8 @@ void display()
 }
 
 void Page_Edit(){   
-	W=GetWindowWidth(),H=GetWindowHeight();
-	display();
+	W=GetWindowWidth(),H=GetWindowHeight();inPage=2;
+	display();inPage=0;
 }
 void DrawMenu_Edit()
 {//主菜单
@@ -259,13 +275,17 @@ void DrawButton_Edit()
 		if( edit_mode == 5 ) edit_mode = 0;
 		else edit_mode = 5;
 	}
+	if( button(GenUIID(1), x+w*1.2,y-dy*5,w/2,h,"确定")) {
+		SetFigures_Edit();
+	}
 }
 
 void DrawEditText_Edit()
 {//交互文本框 
 	static char memo[80]="Maze Size:";
 	static char size[10]="22";
-	static char tips[80] = "";
+	static char tips[20] = "";
+	static char tips2[20] = "";
 	double fH = GetFontHeight();
 	double h = fH*2;
 	double x =  W*2/3;
@@ -275,15 +295,15 @@ void DrawEditText_Edit()
 	SetPenColor("Brown");
 	drawLabel(x-TextStringWidth(memo), y+fH*0.6,memo);
 	if(textbox(GenUIID(0), x,y, w,h,size, sizeof(size))){  // for debug : remember to cancel char and keyboard event in other page!
-		int number = 0;
+		number=0;
 		for(int i=0;size[i]!='\0';++i)
 		{	
 			if(size[i]>'9' || size[i]<'0') {sprintf(tips,"[ERROR] Please enter digits!");return;}
 			else if( i > 1) {sprintf(tips,"Too Large!",size);return;}
 		}
-		for(int i=0;size[i]!='\0';++i) number = (size[i]-'0')*10 + number;
-		if(number<=12) sprintf(tips,"Too Small, Boring!");
-		else sprintf(tips,"Press [ENTER] to confirm the change! %s", size);
+		for(int i=0; size[i]<='9' && size[i]>='0';++i) number = size[i]-'0' + number*10;
+			if( number <= 12 ) {sprintf(tips,"Too Small!", size);return;}
+			sprintf(tips,"Press [确认] to confirm the change! ");
 	}
 	
 	SetPenColor("Gray");
